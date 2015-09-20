@@ -1,4 +1,5 @@
 ﻿using System;
+using Windows.Devices.Gpio;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,9 +23,18 @@ namespace RadioRepeater
     /// </summary>
     public sealed partial class MainPage : Page
     {
+
+        private SolidColorBrush redDot = new SolidColorBrush(Windows.UI.Colors.Red);
+        private SolidColorBrush blackDot = new SolidColorBrush(Windows.UI.Colors.Black);
+
         public MainPage()
         {
             this.InitializeComponent();
+            Repeater link = new Repeater();
+            link.RXCORTimeout = TimeSpan.FromMinutes(.5);
+            link.TXCWIDPulse = TimeSpan.FromMilliseconds(100);
+            bool runok = link.runrepeater();
+
         }
     }
 }

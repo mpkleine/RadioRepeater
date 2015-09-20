@@ -235,7 +235,6 @@ C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\bin\x86\Debug\System.X
 C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\bin\x86\Debug\System.Xml.XDocument.dll
 C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\bin\x86\Debug\System.Xml.XmlDocument.dll
 C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\bin\x86\Debug\System.Xml.XmlSerializer.dll
-C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\x86\Debug\RadioRepeater.csprojResolveAssemblyReference.cache
 C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\x86\Debug\App.g.i.cs
 C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\x86\Debug\App.g.cs
 C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\x86\Debug\MainPage.g.i.cs

@@ -7,7 +7,36 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    <Grid Background= "Black">
+        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="left">
+            <TextBlock x:Name="RXStatText" Foreground="White" Text="RXStatText" Margin="10" TextAlignment="Center" FontSize="26.667" />
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="left">
+                <TextBlock x:Name="RXCTCSSText" Foreground="White" Text="RXCTCSSText" Margin="10" TextAlignment="Center" FontSize="26.667" />
+        </StackPanel>
+        <StackPanel Grid.Row="3" Grid.Column="1" HorizontalAlignment="left">
+            <TextBlock x:Name="TXPTTText" Foreground="White" Text="TXPTTText" Margin="10" TextAlignment="Center" FontSize="26.667" />
+        </StackPanel>
+        <StackPanel Grid.Row="4" Grid.Column="1" HorizontalAlignment="left">
+            <TextBlock x:Name="TXCTCSSText" Foreground="White" Text="TXCTCSSText" Margin="10" TextAlignment="Center" FontSize="26.667" />
+        </StackPanel>
+        <StackPanel Grid.Row="5" Grid.Column="1" HorizontalAlignment="left">
+            <TextBlock x:Name="TXCWIDText" Foreground="White" Text="TXCWIDText" Margin="10" TextAlignment="Center" FontSize="26.667" />
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right">
+            <Ellipse x:Name="RXStat" Fill="LightGray" Stroke="White" Width="100" Height="100" Margin="10"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right">
+            <Ellipse x:Name="RXCTCSS" Fill="LightGray" Stroke="White" Width="100" Height="100" Margin="10"/>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right">
+            <Ellipse x:Name="TXPTT" Fill="LightGray" Stroke="White" Width="100" Height="100" Margin="10"/>
+        </StackPanel>
+        <StackPanel Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right">
+            <Ellipse x:Name="TXCTCSS" Fill="LightGray" Stroke="White" Width="100" Height="100" Margin="10"/>
+        </StackPanel>
+        <StackPanel Grid.Row="5" Grid.Column="2" HorizontalAlignment="Right">
+            <Ellipse x:Name="TXCWID" Fill="LightGray" Stroke="White" Width="100" Height="100" Margin="10"/>
+        </StackPanel>
     </Grid>
 </Page>
