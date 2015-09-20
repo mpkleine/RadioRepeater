@@ -12,7 +12,11 @@ namespace RadioRepeater
     {
 
         // used to transfer I/O info
-        private GpioPin channel;
+        private GpioPin RXCORChannel;
+        private GpioPin RXCTCSSChannel;
+        private GpioPin TXPTTChannel;
+        private GpioPin TXCTCSSChannel;
+        private GpioPin TXCWIDChannel;
         private GpioPinValue channelValue;
 
         // setup all of the timers
@@ -204,6 +208,7 @@ namespace RadioRepeater
             }
         }
 
+
        // make TXCWIDPulse a public item
        private TimeSpan TXCWIDPulseField = TimeSpan.FromMinutes(9.75);
 
@@ -238,20 +243,26 @@ namespace RadioRepeater
             // Show an error if there is no GPIO controller
             if (gpio == null)
             {
-                channel = null;
+                RXCORChannel = null;
                 return;
             }
 
             // Set up the input RXCOR line
-            channel = gpio.OpenPin(RXCORPin);
-// sdj  channel.SetDriveMode( GpioPinEdge.RisingEdge);
+            RXCORChannel = gpio.OpenPin(RXCORPin);
+            RXCORChannel.SetDriveMode(GpioPinDriveMode.Input);
+            RXCORChannel.DebounceTimeout = TimeSpan.FromMilliseconds(50);
+            RXCORChannel.ValueChanged += RXCORPin_ValueChanged;
+
 
             // Set up the input RXCTCSS line
-            channel = gpio.OpenPin(RXCTCSSPin);
-// fsdf channel.SetDriveMode(GpioPinEdge.RisingEdge);
+            RXCTCSSChannel = gpio.OpenPin(RXCTCSSPin);
+            RXCTCSSChannel.SetDriveMode(GpioPinDriveMode.Input);
+            RXCTCSSChannel.DebounceTimeout = TimeSpan.FromMilliseconds(50);
+            RXCTCSSChannel.ValueChanged += RXCTCSSPin_ValueChanged;
 
-            // Turn off TXPTT to start
-            channel = gpio.OpenPin(TXPTTPin);
+
+            // Set up, and turn off TXPTT to start
+            TXPTTChannel = gpio.OpenPin(TXPTTPin);
             if (TXPTTActive)
             { 
                 channelValue = GpioPinValue.Low;
@@ -260,11 +271,12 @@ namespace RadioRepeater
             {
                 channelValue = GpioPinValue.High;
             }
-            channel.Write(channelValue);
-            channel.SetDriveMode(GpioPinDriveMode.Output);
+            TXPTTChannel.Write(channelValue);
+            TXPTTChannel.SetDriveMode(GpioPinDriveMode.Output);
 
-            // Turn off CTCSS to start
-            channel = gpio.OpenPin(TXCTCSSPin);
+
+            // Set up, and turn off CTCSS to start
+            TXCTCSSChannel = gpio.OpenPin(TXCTCSSPin);
             if (TXCTCSSActive)
             {
                 channelValue = GpioPinValue.Low;
@@ -273,11 +285,12 @@ namespace RadioRepeater
             {
                 channelValue = GpioPinValue.High;
             }
-            channel.Write(channelValue);
-            channel.SetDriveMode(GpioPinDriveMode.Output);
+            TXCTCSSChannel.Write(channelValue);
+            TXCTCSSChannel.SetDriveMode(GpioPinDriveMode.Output);
 
-            // Turn off CWID to start
-            channel = gpio.OpenPin(TXCWIDPin);
+
+            // Set up, and turn off CWID to start
+            TXCWIDChannel = gpio.OpenPin(TXCWIDPin);
             if (TXCWIDActive)
             {
                 channelValue = GpioPinValue.Low;
@@ -286,11 +299,38 @@ namespace RadioRepeater
             {
                 channelValue = GpioPinValue.High;
             }
-            channel.Write(channelValue);
-            channel.SetDriveMode(GpioPinDriveMode.Output);
+            TXCWIDChannel.Write(channelValue);
+            TXCWIDChannel.SetDriveMode(GpioPinDriveMode.Output);
 
         }
 
-    }
+        private void RXCORPin_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs args)
+        {
+            if (args.Edge == GpioPinEdge.RisingEdge)
+            {
+                // BlinkTimer.Change(0, TurboBlinkInterval);
+            }
+            else
+            {
+                // BlinkTimer.Change(0, NormalBlinkInterval);
+            }
+        }
 
+
+
+        private void RXCTCSSPin_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs args)
+        {
+            if (args.Edge == GpioPinEdge.RisingEdge)
+            {
+                // BlinkTimer.Change(0, TurboBlinkInterval);
+            }
+            else
+            {
+                // BlinkTimer.Change(0, NormalBlinkInterval);
+            }
+        }
+
+
+
+    }
 }
