@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
+
 
 namespace RadioRepeater
 {
@@ -304,6 +306,18 @@ namespace RadioRepeater
 
         }
 
+        /// <summary>
+        /// This is the Event from the change in COR line. If the CTCSS line is active, 
+        /// then the TX should be turned on, and the CTCSS should be turned on, and 
+        /// the timeout timer should be started, if it's not running. 
+        /// On unkey, the TX and CTCSS should be turned off. The timeout timer should 
+        /// be stopped.
+        /// Also, update the display.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+
+
         private void RXCORPin_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs args)
         {
             if (args.Edge == GpioPinEdge.RisingEdge)
@@ -316,7 +330,16 @@ namespace RadioRepeater
             }
         }
 
-
+        /// <summary>
+        /// This is the event from the inbound CTCSS line. If the COR line is active, 
+        /// then the TX should be turned on, and the CTCSS should be turned on, and 
+        /// the timeout timer should be started, if it's not running.
+        /// On unkey, the TX and CTCSS should be turned off. The timeout timer should 
+        /// be stopped.
+        /// Also, update the display.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
 
         private void RXCTCSSPin_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs args)
         {
@@ -328,6 +351,127 @@ namespace RadioRepeater
             {
                 // BlinkTimer.Change(0, NormalBlinkInterval);
             }
+        }
+
+        /// <summary>
+        /// This will turn off the TX radio and update the display.
+        /// </summary>
+
+        private void TXPTTOff()
+        {
+            if (TXPTTActive)
+            {
+                channelValue = GpioPinValue.Low;
+            }
+            else
+            {
+                channelValue = GpioPinValue.High;
+            }
+            TXPTTChannel.Write(channelValue);
+            TXPTTChannel.SetDriveMode(GpioPinDriveMode.Output);
+
+            // todo:
+            // Update display
+        }
+
+        /// <summary>
+        /// This will turn on the TX 
+        /// The CW ID timer must be started, if it isn't running.
+        /// Also, update the display.
+        /// </summary>
+
+        private void TXPTTOn()
+        {
+            if (TXPTTActive)
+            {
+                channelValue = GpioPinValue.High;
+            }
+            else
+            {
+                channelValue = GpioPinValue.Low;
+            }
+            TXPTTChannel.Write(channelValue);
+            TXPTTChannel.SetDriveMode(GpioPinDriveMode.Output);
+
+            // todo:
+            // start the cwid timer, if it's not running
+            // Update display
+
+        }
+
+        /// <summary>
+        /// This will turn off the CTCSS tones when the RX signal goes off and 
+        /// update the display.
+        /// </summary>
+
+        private void TXCTCSSOff()
+        {
+            if (TXCTCSSActive)
+            {
+                channelValue = GpioPinValue.Low;
+            }
+            else
+            {
+                channelValue = GpioPinValue.High;
+            }
+            TXCTCSSChannel.Write(channelValue);
+            TXCTCSSChannel.SetDriveMode(GpioPinDriveMode.Output);
+
+            // todo:
+            // Update display
+            
+        }
+
+
+        /// <summary>
+        /// This will turn on the CTCSS encoder when the RX signal comes on
+        /// and update the display.
+        /// </summary>
+   
+        private void TXCTCSSOn()
+        {
+            if (TXCTCSSActive)
+            {
+                channelValue = GpioPinValue.High;
+            }
+            else
+            {
+                channelValue = GpioPinValue.Low;
+            }
+            TXCTCSSChannel.Write(channelValue);
+            TXCTCSSChannel.SetDriveMode(GpioPinDriveMode.Output);
+
+            // todo:
+            // Update display
+
+        }
+
+        /// <summary>
+        /// This starts a CWID cycle.
+        /// First, turn on the id line.
+        /// Second, clear out the ID timer.
+        /// Third, if the RX is on, restart the ID timer.
+        /// Fourth, start the CWID Pulse timer (this is what turns off the CWID line)
+        /// and, update the display.
+        /// </summary>
+
+        private void TXCWIDOn()
+        {
+            if (TXCWIDActive)
+            {
+                    channelValue = GpioPinValue.High;
+            }
+            else {
+                    channelValue = GpioPinValue.Low;
+            }
+            TXCWIDChannel.Write(channelValue);
+            TXCWIDChannel.SetDriveMode(GpioPinDriveMode.Output);
+           
+            // todo:
+            // clear the ID timer 
+            // Restart ID timer, if RX is on
+            // set up timer for turn off pulse
+            // Update display
         }
 
 

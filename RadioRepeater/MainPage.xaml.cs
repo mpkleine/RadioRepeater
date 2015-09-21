@@ -25,7 +25,7 @@ namespace RadioRepeater
     {
 
         private SolidColorBrush redDot = new SolidColorBrush(Windows.UI.Colors.Red);
-        private SolidColorBrush blackDot = new SolidColorBrush(Windows.UI.Colors.Black);
+        private SolidColorBrush greenDot = new SolidColorBrush(Windows.UI.Colors.Green);
 
         public MainPage()
         {
@@ -34,7 +34,6 @@ namespace RadioRepeater
             link.RXCORTimeout = TimeSpan.FromMinutes(.5);
             link.TXCWIDPulse = TimeSpan.FromMilliseconds(100);
             bool runok = link.runrepeater();
-
         }
     }
 }
