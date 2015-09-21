@@ -35,5 +35,8 @@ namespace RadioRepeater
             link.TXCWIDPulse = TimeSpan.FromMilliseconds(100);
             bool runok = link.runrepeater();
         }
+
+
+
     }
 }
