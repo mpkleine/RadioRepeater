@@ -31,6 +31,7 @@ Hardware CW Identification generator Comspec ID-8 (active high, or low to
    RadioRepeater happens to come up while the CW ID is occuring, the CTCSS  
    encoder will turn on, and the incoming audio will mix with the CW ID tones, 
    and they will be heard mixed on the output of the transmitter.
+   http://www.com-spec.com/insheet/id8insc.pdf
 
 The output display of the RPi2 (HDMI) shows a dashboard that lists the
 state of all 5 input and output lines, with the last time that the signal
