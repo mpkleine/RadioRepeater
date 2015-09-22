@@ -38,14 +38,14 @@ was toggled off/on.
 
 Raspberry Pi 2 - GPIO pin-out connections:
 
-1 - RX COR input (from Kenwood xxx Radio)
+1 - RX COR input (from Kenwood xxx receiver radio) (active high, or low, configurable)
 
-2 - RX CTCSS input (from Comspec, or Kenwood radio, not sure which)
+2 - RX CTCSS input (from Comspec, or Kenwood radio, not sure which) (active high, or low, configurable)
 
-3 - TX PTT Output (to Kenwood Radio)
+3 - TX PTT Output (to Kenwood transmitter radio) (active low, but configurable)
 
-4 - TX CTCSS Output
+4 - TX CTCSS Output (active low, but configurable)
 
-5 - TX CW Identification device
+5 - TX CW Identification device (active low, but configurable at either end)
 
 GPIO pin configuration is soft coded, and can be modified by the configuration file.
