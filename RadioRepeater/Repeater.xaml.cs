@@ -1,17 +1,38 @@
 ﻿using System;
-using Windows.Devices.Gpio;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+using Windows.Devices.Gpio;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
 
+// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace RadioRepeater
 {
-    public class Repeater
+    /// <summary>
+    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// </summary>
+    public sealed partial class Repeater : Page
     {
+        public Repeater()
+        {
+            this.InitializeComponent();
+        }
+
+
+        private SolidColorBrush redDot = new SolidColorBrush(Windows.UI.Colors.Red);
+        private SolidColorBrush greenDot = new SolidColorBrush(Windows.UI.Colors.Green);
+
+
         // used to transfer I/O info
         private GpioPin RXCORChannel;
         private GpioPin RXCTCSSChannel;
@@ -214,30 +235,30 @@ namespace RadioRepeater
         }
 
 
-       // make TXCWIDTimeout a public item
-       private TimeSpan TXCWIDTimeoutField = TimeSpan.FromMinutes(9.75);
+        // make TXCWIDTimeout a public item
+        private TimeSpan TXCWIDTimeoutField = TimeSpan.FromMinutes(9.75);
 
-       public TimeSpan TXCWIDTimeout
-       {
-           get
-           {
-               return TXCWIDTimeoutField;
-           }
-           set
-           {
-               TXCWIDTimeoutField = value;
-           }
-       }
+        public TimeSpan TXCWIDTimeout
+        {
+            get
+            {
+                return TXCWIDTimeoutField;
+            }
+            set
+            {
+                TXCWIDTimeoutField = value;
+            }
+        }
 
 
-       public bool runrepeater()
-       {
+        public bool runrepeater()
+        {
             // Initialize the GPIO
             InitGPIO();
 
             // Go back to calling program, system is run off of timers from here
             return true;
-       }
+        }
 
 
         // Initialize the GPIO 
@@ -269,7 +290,7 @@ namespace RadioRepeater
             // Set up, and turn off TXPTT to start
             TXPTTChannel = gpio.OpenPin(TXPTTPin);
             if (TXPTTActive)
-            { 
+            {
                 channelValue = GpioPinValue.Low;
             }
             else
@@ -359,8 +380,30 @@ namespace RadioRepeater
                 TXCTCSSOff();
 
             }
-            // todo:
-            // update display
+
+            // Update display 
+            if (rxcor)
+            {
+                // Output the time, and change to green.
+                RXCORText.Text = "Last RXCOR on: " + DateTime.Now;
+                RXCOR.Fill = greenDot;
+                // Output the time, and change to green
+                if (rx)
+                {
+                    // Output the time, and change to green.
+                    RXText.Text = "Last RX on: " + DateTime.Now;
+                    RX.Fill = greenDot;
+                }
+            }
+            else
+            {
+                // Output the time, and change to red.
+                RXCORText.Text = "Last RXCOR off: " + DateTime.Now;
+                RXCOR.Fill = redDot;
+                // Output the time, and change to red.
+                RXText.Text = "Last RX off: " + DateTime.Now;
+                RX.Fill = redDot;
+            }
         }
 
         /// <summary>
@@ -380,7 +423,8 @@ namespace RadioRepeater
                 if (RXCTCSSActive)
                 { // on
                     rxctcss = true;
-                } else
+                }
+                else
                 { // off
                     rxctcss = false;
                 }
@@ -411,8 +455,28 @@ namespace RadioRepeater
                 TXCTCSSOff();
 
             }
-            // todo:
-            // update display
+
+            // Update display 
+            if (rxctcss)
+            {
+                // Output the time, and change to green.
+                RXCTCSSText.Text = "Last RXCTCSS on: " + DateTime.Now;
+                RXCTCSS.Fill = greenDot;
+                // Output the time, and change to green
+if (rx) {
+                    // Output the time, and change to green.
+                    RXText.Text = "Last RX on: " + DateTime.Now;
+                    RX.Fill = greenDot;
+                }
+            } else
+            {
+                // Output the time, and change to red.
+                RXCTCSSText.Text = "Last RXCTCSS off: " + DateTime.Now;
+                RXCTCSS.Fill = redDot;
+                // Output the time, and change to red.
+                RXText.Text = "Last RX off: " + DateTime.Now;
+                RX.Fill = redDot;
+            }
         }
 
         /// <summary>
@@ -432,8 +496,9 @@ namespace RadioRepeater
             TXPTTChannel.Write(channelValue);
             TXPTTChannel.SetDriveMode(GpioPinDriveMode.Output);
 
-            // todo:
-            // Update display
+            // Output the time, and change to red.
+            TXPTTText.Text = "Last TXPTT off: " + DateTime.Now;
+            TXPTT.Fill = redDot;
         }
 
         /// <summary>
@@ -458,8 +523,9 @@ namespace RadioRepeater
             // Setup the CWID timer, if not already running
             CWIDTimerStart();
 
-            // todo:
-            // Update display
+            // Output the time, and change to green.
+            TXPTTText.Text = "Last TXPTT on: " + DateTime.Now;
+            TXPTT.Fill = greenDot;
 
         }
 
@@ -482,9 +548,10 @@ namespace RadioRepeater
             TXCTCSSChannel.Write(channelValue);
             TXCTCSSChannel.SetDriveMode(GpioPinDriveMode.Output);
 
-            // todo:
-            // Update display
-            
+            // Output the time, and change to red.
+            TXCTCSSText.Text = "Last TXCTCSS off: " + DateTime.Now;
+            TXCTCSS.Fill = redDot;
+
         }
 
 
@@ -492,7 +559,7 @@ namespace RadioRepeater
         /// This will turn on the CTCSS encoder when the RX signal comes on
         /// and update the display.
         /// </summary>
-   
+
         private void TXCTCSSOn()
         {
             if (TXCTCSSActive)
@@ -506,8 +573,9 @@ namespace RadioRepeater
             TXCTCSSChannel.Write(channelValue);
             TXCTCSSChannel.SetDriveMode(GpioPinDriveMode.Output);
 
-            // todo:
-            // Update display
+            // Output the time, and change to green.
+            TXCTCSSText.Text = "Last TXCTCSS on: " + DateTime.Now;
+            TXCTCSS.Fill = greenDot;
 
         }
 
@@ -527,7 +595,8 @@ namespace RadioRepeater
             {
                 channelValue = GpioPinValue.High;
             }
-            else {
+            else
+            {
                 channelValue = GpioPinValue.Low;
             }
             TXCWIDChannel.Write(channelValue);
@@ -546,11 +615,14 @@ namespace RadioRepeater
                 // Setup the CWID timer
                 CWIDTimerStart();
             }
-            else { // shut off the timer
+            else
+            { // shut off the timer
                 CWIDTimeout.Stop();
             }
-            // todo:
-            // Update display
+
+            // Output the time, and change to red.
+            TXCWIDText.Text = "Last CWID on: " + DateTime.Now;
+            TXCWID.Fill = greenDot;
         }
 
         /// <summary>
@@ -567,8 +639,11 @@ namespace RadioRepeater
             // turn off timer
             CORTimeout.Stop();
 
-            // todo:
-            // Update display
+            // Output the time, and change to red.
+            TXPTTText.Text = "Last PTT timeout: " + DateTime.Now;
+            TXPTT.Fill = redDot;
+            TXCTCSSText.Text = "Last TXCTCSS timeout: " + DateTime.Now;
+            TXCTCSS.Fill = redDot;
         }
 
 
@@ -592,15 +667,17 @@ namespace RadioRepeater
             {
                 channelValue = GpioPinValue.High;
             }
-            // todo:
-            // Update display
+
+            // Output the time, and change to red.
+            TXCWIDText.Text = "Last CWID off: " + DateTime.Now;
+            TXCWID.Fill = redDot;
         }
 
         /// <summary>
         /// This will restart the CWID timer, if it's not already started
         /// </summary>
         private void CWIDTimerStart()
-        { 
+        {
             // Setup the CWID timer
             if (!CWIDTimeout.IsEnabled)
             {
@@ -633,3 +710,4 @@ namespace RadioRepeater
 
     }
 }
+

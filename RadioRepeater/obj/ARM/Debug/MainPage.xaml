@@ -10,11 +10,6 @@
     <Grid Background= "Black">
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -23,41 +18,9 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock x:ConnectionId='11' x:Name="title" Foreground="Red" Text="N5HZR Radio Repeater" Margin="10" TextAlignment="Center" FontSize="70" />
+            <TextBlock x:ConnectionId='1' x:Name="title" Foreground="Red" Text="N5HZR Radio Repeater" Margin="10" TextAlignment="Center" FontSize="70" />
         </StackPanel>
 
-
-        <StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock x:ConnectionId='10' x:Name="RXStatText" Foreground="White" Text="RXStatText" Margin="10" TextAlignment="Center" FontSize="26.667" />
-        </StackPanel>
-        <StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock x:ConnectionId='9' x:Name="RXCTCSSText" Foreground="White" Text="RXCTCSSText" Margin="10" TextAlignment="Center" FontSize="26.667" />
-        </StackPanel>
-        <StackPanel Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock x:ConnectionId='8' x:Name="TXPTTText" Foreground="White" Text="TXPTTText" Margin="10" TextAlignment="Center" FontSize="26.667" />
-        </StackPanel>
-        <StackPanel Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock x:ConnectionId='7' x:Name="TXCTCSSText" Foreground="White" Text="TXCTCSSText" Margin="10" TextAlignment="Center" FontSize="26.667" />
-        </StackPanel>
-        <StackPanel Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock x:ConnectionId='6' x:Name="TXCWIDText" Foreground="White" Text="TXCWIDText" Margin="10" TextAlignment="Center" FontSize="26.667" />
-        </StackPanel>
-
-        <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Ellipse x:ConnectionId='5' x:Name="RXStat" Fill="LightGray" Stroke="White" Width="100" Height="100" Margin="10"/>
-        </StackPanel>
-        <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Ellipse x:ConnectionId='4' x:Name="RXCTCSS" Fill="LightGray" Stroke="White" Width="100" Height="100" Margin="10"/>
-        </StackPanel>
-        <StackPanel Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Ellipse x:ConnectionId='3' x:Name="TXPTT" Fill="LightGray" Stroke="White" Width="100" Height="100" Margin="10"/>
-        </StackPanel>
-        <StackPanel Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Ellipse x:ConnectionId='2' x:Name="TXCTCSS" Fill="LightGray" Stroke="White" Width="100" Height="100" Margin="10"/>
-        </StackPanel>
-        <StackPanel Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Ellipse x:ConnectionId='1' x:Name="TXCWID" Fill="LightGray" Stroke="White" Width="100" Height="100" Margin="10"/>
-        </StackPanel>
     </Grid>
 </Page>
 

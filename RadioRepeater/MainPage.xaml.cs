@@ -24,12 +24,9 @@ namespace RadioRepeater
     public sealed partial class MainPage : Page
     {
 
-        private SolidColorBrush redDot = new SolidColorBrush(Windows.UI.Colors.Red);
-        private SolidColorBrush greenDot = new SolidColorBrush(Windows.UI.Colors.Green);
-
         public MainPage()
         {
-            this.InitializeComponent();
+     //       this.InitializeComponent();
             Repeater link = new Repeater();
             link.RXCORTimeout = TimeSpan.FromMinutes(.5);
             link.TXCWIDPulse = TimeSpan.FromMilliseconds(100);
