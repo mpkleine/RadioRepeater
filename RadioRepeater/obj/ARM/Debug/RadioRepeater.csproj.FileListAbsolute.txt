@@ -433,9 +433,4 @@ C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\ARM\Debug\Core\Ass
 C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\ARM\Debug\Core\RadioRepeater.xr.xml
 C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\ARM\Debug\Core\WinMetadata\Windows.winmd
 C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\ARM\Debug\Core\resources.pri
-C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\bin\ARM\Debug\Repeater.xbf
-C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\ARM\Debug\Repeater.g.i.cs
-C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\ARM\Debug\Repeater.g.cs
-C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\ARM\Debug\Repeater.xaml
-C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\ARM\Debug\Repeater.xbf
 C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\ARM\Debug\RadioRepeater.csprojResolveAssemblyReference.cache

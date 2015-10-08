@@ -132,25 +132,27 @@ namespace RadioRepeater.RadioRepeater_XamlTypeInfo
 
         private void InitTypeTables()
         {
-            _typeNameTable = new string[8];
+            _typeNameTable = new string[9];
             _typeNameTable[0] = "RadioRepeater.MainPage";
             _typeNameTable[1] = "Windows.UI.Xaml.Controls.Page";
             _typeNameTable[2] = "Windows.UI.Xaml.Controls.UserControl";
-            _typeNameTable[3] = "Int32";
-            _typeNameTable[4] = "Boolean";
-            _typeNameTable[5] = "TimeSpan";
-            _typeNameTable[6] = "System.ValueType";
-            _typeNameTable[7] = "Object";
+            _typeNameTable[3] = "RadioRepeater.Repeater";
+            _typeNameTable[4] = "Int32";
+            _typeNameTable[5] = "Boolean";
+            _typeNameTable[6] = "TimeSpan";
+            _typeNameTable[7] = "System.ValueType";
+            _typeNameTable[8] = "Object";
 
-            _typeTable = new global::System.Type[8];
+            _typeTable = new global::System.Type[9];
             _typeTable[0] = typeof(global::RadioRepeater.MainPage);
             _typeTable[1] = typeof(global::Windows.UI.Xaml.Controls.Page);
             _typeTable[2] = typeof(global::Windows.UI.Xaml.Controls.UserControl);
-            _typeTable[3] = typeof(global::System.Int32);
-            _typeTable[4] = typeof(global::System.Boolean);
-            _typeTable[5] = typeof(global::System.TimeSpan);
-            _typeTable[6] = typeof(global::System.ValueType);
-            _typeTable[7] = typeof(global::System.Object);
+            _typeTable[3] = typeof(global::RadioRepeater.Repeater);
+            _typeTable[4] = typeof(global::System.Int32);
+            _typeTable[5] = typeof(global::System.Boolean);
+            _typeTable[6] = typeof(global::System.TimeSpan);
+            _typeTable[7] = typeof(global::System.ValueType);
+            _typeTable[8] = typeof(global::System.Object);
         }
 
         private int LookupTypeIndexByName(string typeName)
@@ -186,6 +188,7 @@ namespace RadioRepeater.RadioRepeater_XamlTypeInfo
         }
 
         private object Activate_0_MainPage() { return new global::RadioRepeater.MainPage(); }
+        private object Activate_3_Repeater() { return new global::RadioRepeater.Repeater(); }
 
         private global::Windows.UI.Xaml.Markup.IXamlType CreateXamlType(int typeIndex)
         {
@@ -200,6 +203,21 @@ namespace RadioRepeater.RadioRepeater_XamlTypeInfo
             case 0:   //  RadioRepeater.MainPage
                 userType = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.Page"));
                 userType.Activator = Activate_0_MainPage;
+                userType.SetIsLocalType();
+                xamlType = userType;
+                break;
+
+            case 1:   //  Windows.UI.Xaml.Controls.Page
+                xamlType = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlSystemBaseType(typeName, type);
+                break;
+
+            case 2:   //  Windows.UI.Xaml.Controls.UserControl
+                xamlType = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlSystemBaseType(typeName, type);
+                break;
+
+            case 3:   //  RadioRepeater.Repeater
+                userType = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.Page"));
+                userType.Activator = Activate_3_Repeater;
                 userType.AddMemberName("RXCORPin");
                 userType.AddMemberName("RXCTCSSPin");
                 userType.AddMemberName("TXPTTPin");
@@ -217,34 +235,26 @@ namespace RadioRepeater.RadioRepeater_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 1:   //  Windows.UI.Xaml.Controls.Page
+            case 4:   //  Int32
                 xamlType = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 2:   //  Windows.UI.Xaml.Controls.UserControl
+            case 5:   //  Boolean
                 xamlType = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 3:   //  Int32
-                xamlType = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlSystemBaseType(typeName, type);
-                break;
-
-            case 4:   //  Boolean
-                xamlType = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlSystemBaseType(typeName, type);
-                break;
-
-            case 5:   //  TimeSpan
+            case 6:   //  TimeSpan
                 userType = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("System.ValueType"));
                 userType.SetIsReturnTypeStub();
                 xamlType = userType;
                 break;
 
-            case 6:   //  System.ValueType
+            case 7:   //  System.ValueType
                 userType = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
                 xamlType = userType;
                 break;
 
-            case 7:   //  Object
+            case 8:   //  Object
                 xamlType = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
             }
@@ -252,134 +262,134 @@ namespace RadioRepeater.RadioRepeater_XamlTypeInfo
         }
 
 
-        private object get_0_MainPage_RXCORPin(object instance)
+        private object get_0_Repeater_RXCORPin(object instance)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             return that.RXCORPin;
         }
-        private void set_0_MainPage_RXCORPin(object instance, object Value)
+        private void set_0_Repeater_RXCORPin(object instance, object Value)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             that.RXCORPin = (global::System.Int32)Value;
         }
-        private object get_1_MainPage_RXCTCSSPin(object instance)
+        private object get_1_Repeater_RXCTCSSPin(object instance)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             return that.RXCTCSSPin;
         }
-        private void set_1_MainPage_RXCTCSSPin(object instance, object Value)
+        private void set_1_Repeater_RXCTCSSPin(object instance, object Value)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             that.RXCTCSSPin = (global::System.Int32)Value;
         }
-        private object get_2_MainPage_TXPTTPin(object instance)
+        private object get_2_Repeater_TXPTTPin(object instance)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             return that.TXPTTPin;
         }
-        private void set_2_MainPage_TXPTTPin(object instance, object Value)
+        private void set_2_Repeater_TXPTTPin(object instance, object Value)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             that.TXPTTPin = (global::System.Int32)Value;
         }
-        private object get_3_MainPage_TXCTCSSPin(object instance)
+        private object get_3_Repeater_TXCTCSSPin(object instance)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             return that.TXCTCSSPin;
         }
-        private void set_3_MainPage_TXCTCSSPin(object instance, object Value)
+        private void set_3_Repeater_TXCTCSSPin(object instance, object Value)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             that.TXCTCSSPin = (global::System.Int32)Value;
         }
-        private object get_4_MainPage_TXCWIDPin(object instance)
+        private object get_4_Repeater_TXCWIDPin(object instance)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             return that.TXCWIDPin;
         }
-        private void set_4_MainPage_TXCWIDPin(object instance, object Value)
+        private void set_4_Repeater_TXCWIDPin(object instance, object Value)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             that.TXCWIDPin = (global::System.Int32)Value;
         }
-        private object get_5_MainPage_RXCORActive(object instance)
+        private object get_5_Repeater_RXCORActive(object instance)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             return that.RXCORActive;
         }
-        private void set_5_MainPage_RXCORActive(object instance, object Value)
+        private void set_5_Repeater_RXCORActive(object instance, object Value)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             that.RXCORActive = (global::System.Boolean)Value;
         }
-        private object get_6_MainPage_RXCORTimeout(object instance)
+        private object get_6_Repeater_RXCORTimeout(object instance)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             return that.RXCORTimeout;
         }
-        private void set_6_MainPage_RXCORTimeout(object instance, object Value)
+        private void set_6_Repeater_RXCORTimeout(object instance, object Value)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             that.RXCORTimeout = (global::System.TimeSpan)Value;
         }
-        private object get_7_MainPage_RXCTCSSActive(object instance)
+        private object get_7_Repeater_RXCTCSSActive(object instance)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             return that.RXCTCSSActive;
         }
-        private void set_7_MainPage_RXCTCSSActive(object instance, object Value)
+        private void set_7_Repeater_RXCTCSSActive(object instance, object Value)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             that.RXCTCSSActive = (global::System.Boolean)Value;
         }
-        private object get_8_MainPage_TXPTTActive(object instance)
+        private object get_8_Repeater_TXPTTActive(object instance)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             return that.TXPTTActive;
         }
-        private void set_8_MainPage_TXPTTActive(object instance, object Value)
+        private void set_8_Repeater_TXPTTActive(object instance, object Value)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             that.TXPTTActive = (global::System.Boolean)Value;
         }
-        private object get_9_MainPage_TXCTCSSActive(object instance)
+        private object get_9_Repeater_TXCTCSSActive(object instance)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             return that.TXCTCSSActive;
         }
-        private void set_9_MainPage_TXCTCSSActive(object instance, object Value)
+        private void set_9_Repeater_TXCTCSSActive(object instance, object Value)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             that.TXCTCSSActive = (global::System.Boolean)Value;
         }
-        private object get_10_MainPage_TXCWIDActive(object instance)
+        private object get_10_Repeater_TXCWIDActive(object instance)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             return that.TXCWIDActive;
         }
-        private void set_10_MainPage_TXCWIDActive(object instance, object Value)
+        private void set_10_Repeater_TXCWIDActive(object instance, object Value)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             that.TXCWIDActive = (global::System.Boolean)Value;
         }
-        private object get_11_MainPage_TXCWIDPulse(object instance)
+        private object get_11_Repeater_TXCWIDPulse(object instance)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             return that.TXCWIDPulse;
         }
-        private void set_11_MainPage_TXCWIDPulse(object instance, object Value)
+        private void set_11_Repeater_TXCWIDPulse(object instance, object Value)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             that.TXCWIDPulse = (global::System.TimeSpan)Value;
         }
-        private object get_12_MainPage_TXCWIDTimeout(object instance)
+        private object get_12_Repeater_TXCWIDTimeout(object instance)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             return that.TXCWIDTimeout;
         }
-        private void set_12_MainPage_TXCWIDTimeout(object instance, object Value)
+        private void set_12_Repeater_TXCWIDTimeout(object instance, object Value)
         {
-            var that = (global::RadioRepeater.MainPage)instance;
+            var that = (global::RadioRepeater.Repeater)instance;
             that.TXCWIDTimeout = (global::System.TimeSpan)Value;
         }
 
@@ -390,83 +400,83 @@ namespace RadioRepeater.RadioRepeater_XamlTypeInfo
 
             switch (longMemberName)
             {
-            case "RadioRepeater.MainPage.RXCORPin":
-                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.MainPage");
+            case "RadioRepeater.Repeater.RXCORPin":
+                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.Repeater");
                 xamlMember = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlMember(this, "RXCORPin", "Int32");
-                xamlMember.Getter = get_0_MainPage_RXCORPin;
-                xamlMember.Setter = set_0_MainPage_RXCORPin;
+                xamlMember.Getter = get_0_Repeater_RXCORPin;
+                xamlMember.Setter = set_0_Repeater_RXCORPin;
                 break;
-            case "RadioRepeater.MainPage.RXCTCSSPin":
-                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.MainPage");
+            case "RadioRepeater.Repeater.RXCTCSSPin":
+                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.Repeater");
                 xamlMember = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlMember(this, "RXCTCSSPin", "Int32");
-                xamlMember.Getter = get_1_MainPage_RXCTCSSPin;
-                xamlMember.Setter = set_1_MainPage_RXCTCSSPin;
+                xamlMember.Getter = get_1_Repeater_RXCTCSSPin;
+                xamlMember.Setter = set_1_Repeater_RXCTCSSPin;
                 break;
-            case "RadioRepeater.MainPage.TXPTTPin":
-                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.MainPage");
+            case "RadioRepeater.Repeater.TXPTTPin":
+                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.Repeater");
                 xamlMember = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlMember(this, "TXPTTPin", "Int32");
-                xamlMember.Getter = get_2_MainPage_TXPTTPin;
-                xamlMember.Setter = set_2_MainPage_TXPTTPin;
+                xamlMember.Getter = get_2_Repeater_TXPTTPin;
+                xamlMember.Setter = set_2_Repeater_TXPTTPin;
                 break;
-            case "RadioRepeater.MainPage.TXCTCSSPin":
-                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.MainPage");
+            case "RadioRepeater.Repeater.TXCTCSSPin":
+                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.Repeater");
                 xamlMember = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlMember(this, "TXCTCSSPin", "Int32");
-                xamlMember.Getter = get_3_MainPage_TXCTCSSPin;
-                xamlMember.Setter = set_3_MainPage_TXCTCSSPin;
+                xamlMember.Getter = get_3_Repeater_TXCTCSSPin;
+                xamlMember.Setter = set_3_Repeater_TXCTCSSPin;
                 break;
-            case "RadioRepeater.MainPage.TXCWIDPin":
-                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.MainPage");
+            case "RadioRepeater.Repeater.TXCWIDPin":
+                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.Repeater");
                 xamlMember = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlMember(this, "TXCWIDPin", "Int32");
-                xamlMember.Getter = get_4_MainPage_TXCWIDPin;
-                xamlMember.Setter = set_4_MainPage_TXCWIDPin;
+                xamlMember.Getter = get_4_Repeater_TXCWIDPin;
+                xamlMember.Setter = set_4_Repeater_TXCWIDPin;
                 break;
-            case "RadioRepeater.MainPage.RXCORActive":
-                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.MainPage");
+            case "RadioRepeater.Repeater.RXCORActive":
+                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.Repeater");
                 xamlMember = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlMember(this, "RXCORActive", "Boolean");
-                xamlMember.Getter = get_5_MainPage_RXCORActive;
-                xamlMember.Setter = set_5_MainPage_RXCORActive;
+                xamlMember.Getter = get_5_Repeater_RXCORActive;
+                xamlMember.Setter = set_5_Repeater_RXCORActive;
                 break;
-            case "RadioRepeater.MainPage.RXCORTimeout":
-                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.MainPage");
+            case "RadioRepeater.Repeater.RXCORTimeout":
+                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.Repeater");
                 xamlMember = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlMember(this, "RXCORTimeout", "TimeSpan");
-                xamlMember.Getter = get_6_MainPage_RXCORTimeout;
-                xamlMember.Setter = set_6_MainPage_RXCORTimeout;
+                xamlMember.Getter = get_6_Repeater_RXCORTimeout;
+                xamlMember.Setter = set_6_Repeater_RXCORTimeout;
                 break;
-            case "RadioRepeater.MainPage.RXCTCSSActive":
-                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.MainPage");
+            case "RadioRepeater.Repeater.RXCTCSSActive":
+                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.Repeater");
                 xamlMember = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlMember(this, "RXCTCSSActive", "Boolean");
-                xamlMember.Getter = get_7_MainPage_RXCTCSSActive;
-                xamlMember.Setter = set_7_MainPage_RXCTCSSActive;
+                xamlMember.Getter = get_7_Repeater_RXCTCSSActive;
+                xamlMember.Setter = set_7_Repeater_RXCTCSSActive;
                 break;
-            case "RadioRepeater.MainPage.TXPTTActive":
-                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.MainPage");
+            case "RadioRepeater.Repeater.TXPTTActive":
+                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.Repeater");
                 xamlMember = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlMember(this, "TXPTTActive", "Boolean");
-                xamlMember.Getter = get_8_MainPage_TXPTTActive;
-                xamlMember.Setter = set_8_MainPage_TXPTTActive;
+                xamlMember.Getter = get_8_Repeater_TXPTTActive;
+                xamlMember.Setter = set_8_Repeater_TXPTTActive;
                 break;
-            case "RadioRepeater.MainPage.TXCTCSSActive":
-                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.MainPage");
+            case "RadioRepeater.Repeater.TXCTCSSActive":
+                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.Repeater");
                 xamlMember = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlMember(this, "TXCTCSSActive", "Boolean");
-                xamlMember.Getter = get_9_MainPage_TXCTCSSActive;
-                xamlMember.Setter = set_9_MainPage_TXCTCSSActive;
+                xamlMember.Getter = get_9_Repeater_TXCTCSSActive;
+                xamlMember.Setter = set_9_Repeater_TXCTCSSActive;
                 break;
-            case "RadioRepeater.MainPage.TXCWIDActive":
-                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.MainPage");
+            case "RadioRepeater.Repeater.TXCWIDActive":
+                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.Repeater");
                 xamlMember = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlMember(this, "TXCWIDActive", "Boolean");
-                xamlMember.Getter = get_10_MainPage_TXCWIDActive;
-                xamlMember.Setter = set_10_MainPage_TXCWIDActive;
+                xamlMember.Getter = get_10_Repeater_TXCWIDActive;
+                xamlMember.Setter = set_10_Repeater_TXCWIDActive;
                 break;
-            case "RadioRepeater.MainPage.TXCWIDPulse":
-                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.MainPage");
+            case "RadioRepeater.Repeater.TXCWIDPulse":
+                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.Repeater");
                 xamlMember = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlMember(this, "TXCWIDPulse", "TimeSpan");
-                xamlMember.Getter = get_11_MainPage_TXCWIDPulse;
-                xamlMember.Setter = set_11_MainPage_TXCWIDPulse;
+                xamlMember.Getter = get_11_Repeater_TXCWIDPulse;
+                xamlMember.Setter = set_11_Repeater_TXCWIDPulse;
                 break;
-            case "RadioRepeater.MainPage.TXCWIDTimeout":
-                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.MainPage");
+            case "RadioRepeater.Repeater.TXCWIDTimeout":
+                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.Repeater");
                 xamlMember = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlMember(this, "TXCWIDTimeout", "TimeSpan");
-                xamlMember.Getter = get_12_MainPage_TXCWIDTimeout;
-                xamlMember.Setter = set_12_MainPage_TXCWIDTimeout;
+                xamlMember.Getter = get_12_Repeater_TXCWIDTimeout;
+                xamlMember.Setter = set_12_Repeater_TXCWIDTimeout;
                 break;
             }
             return xamlMember;
