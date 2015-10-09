@@ -892,14 +892,11 @@ namespace RadioRepeater
         private void CORTimerStart()
         {
             // Setup the RXCOR timer
-            if (!CORTimeout.IsEnabled)
-                {
-                CORTimeout = new DispatcherTimer();
-                TimeSpan CORoff = RXCORTimeout;
-                CORTimeout.Interval = CORoff;
-                CORTimeout.Tick += CORTimeout_Tick;
-                CORTimeout.Start();
-                }
+            CORTimeout = new DispatcherTimer();
+            TimeSpan CORoff = RXCORTimeout;
+            CORTimeout.Interval = CORoff;
+            CORTimeout.Tick += CORTimeout_Tick;
+            CORTimeout.Start();
         }
 
 
@@ -909,10 +906,7 @@ namespace RadioRepeater
         private void CORTimerStop()
         {
             // Setup the RXCOR timer
-            if (!CORTimeout.IsEnabled)
-            {
-                CORTimeout.Stop();
-            }
+            CORTimeout.Stop();
         }
 
     }
