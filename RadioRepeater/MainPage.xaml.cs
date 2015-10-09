@@ -34,7 +34,7 @@ namespace RadioRepeater
         public static DispatcherTimer TimeTimer;
 
 
-
+        private SolidColorBrush yellowDot = new SolidColorBrush(Windows.UI.Colors.Yellow);
         private SolidColorBrush redDot = new SolidColorBrush(Windows.UI.Colors.Red);
         private SolidColorBrush greenDot = new SolidColorBrush(Windows.UI.Colors.Green);
 
@@ -166,7 +166,8 @@ namespace RadioRepeater
         }
 
         // make the RXCORTimeout a public item
-        private TimeSpan RXCORTimeoutField = TimeSpan.FromMinutes(3);
+//        private TimeSpan RXCORTimeoutField = TimeSpan.FromMinutes(3);
+        private TimeSpan RXCORTimeoutField = TimeSpan.FromMinutes(.5);
 
         public TimeSpan RXCORTimeout
         {
@@ -241,7 +242,7 @@ namespace RadioRepeater
         }
 
         // make TXCWIDPulse a public item
-        private TimeSpan TXCWIDPulseField = TimeSpan.FromMilliseconds(100);
+        private TimeSpan TXCWIDPulseField = TimeSpan.FromMilliseconds(2000);
 
         public TimeSpan TXCWIDPulse
         {
@@ -257,7 +258,8 @@ namespace RadioRepeater
 
 
         // make TXCWIDTimeout a public item
-        private TimeSpan TXCWIDTimeoutField = TimeSpan.FromMinutes(9.75);
+//        private TimeSpan TXCWIDTimeoutField = TimeSpan.FromMinutes(9.75);
+        private TimeSpan TXCWIDTimeoutField = TimeSpan.FromMinutes(1);
 
         public TimeSpan TXCWIDTimeout
         {
@@ -394,12 +396,13 @@ namespace RadioRepeater
             // Fill in the current time, and set up the ticker to update the current time.
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                TimeText.Text = DateTime.Now.ToString("MM-dd-yyyy HH:mm");
+                TimeText.Text = DateTime.Now.ToString();
             });
 
             // Setup the Time Ticker, to update the display screen
             TimeTimer = new DispatcherTimer();
             TimeSpan timeSec = TimeSpan.FromMinutes(1);
+            TimeTimer.Interval = timeSec;
             TimeTimer.Tick += TimeTimer_Tick;
             TimeTimer.Start();
         }
@@ -447,14 +450,22 @@ namespace RadioRepeater
             if (rxcor & rxctcss)
             {
                 rx = true;
-                //xx CORTimerStart();
+                // Setup the CWID timer, if not already running
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    CORTimerStart();
+                });
                 TXPTTOn();
                 TXCTCSSOn();
             }
             else
             {
                 rx = false;
-                //x    CORTimerStop();
+                // Stop the CWID timer, if not already running
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    CORTimerStop();
+                });
                 TXPTTOff();
                 TXCTCSSOff();
 
@@ -540,14 +551,22 @@ namespace RadioRepeater
             if (rxcor & rxctcss)
             {
                 rx = true;
-                //x      CORTimerStart();
+                // Setup the CWID timer, if not already running
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    CORTimerStart();
+                });
                 TXPTTOn();
                 TXCTCSSOn();
             }
             else
             {
                 rx = false;
-                //x  CORTimerStop();
+                // Stop the CWID timer, if not already running
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    CORTimerStop();
+                });
                 TXPTTOff();
                 TXCTCSSOff();
 
@@ -645,10 +664,11 @@ namespace RadioRepeater
                 TXPTT.Fill = greenDot;
             });
 
-
             // Setup the CWID timer, if not already running
-            //x CWIDTimerStart();
-
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                CWIDTimerStart();
+            });
         }
 
 
@@ -733,24 +753,13 @@ namespace RadioRepeater
             TXCWIDChannel.SetDriveMode(GpioPinDriveMode.Output);
 
             // Setup the CWID pulse, to turn off the CWID'er
-            // CWIDPulse = new DispatcherTimer();
-            //oo   TimeSpan off = TXCWIDPulse;
-            //oo   MainPage.CWIDPulse.Interval = off;
-            //oo   MainPage.CWIDPulse.Tick += CWIDPulse_Tick;
-            //oo  MainPage.CWIDPulse.Start();
+            CWIDPulse = new DispatcherTimer();
+            TimeSpan CWIDPulseoff = TXCWIDPulse;
+            CWIDPulse.Interval = CWIDPulseoff;
+            CWIDPulse.Tick += CWIDPulse_Tick;
+            CWIDPulse.Start();
 
-            // if the RX is still active, restart the timer
-            if (rx)
-            {
-                // Setup the CWID timer
-                //x         CWIDTimerStart();
-            }
-            else
-            { // shut off the timer
-              //oo     MainPage.CWIDTimeout.Stop();
-            }
-
-            // Output the time, and change to red.
+            // Output the time, and change to green.
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 TXCWIDText.Text = "Last CWID on: " + DateTime.Now;
@@ -770,11 +779,16 @@ namespace RadioRepeater
             // Update the time
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                TimeText.Text = DateTime.Now.ToString("MM-dd-yyyy HH:mm");
+                TimeText.Text = DateTime.Now.ToString();
+                // Setup the Time Ticker, to update the display screen
+                TimeTimer.Stop();
+                TimeTimer = new DispatcherTimer();
+                TimeSpan timeSec = TimeSpan.FromMinutes(1);
+                TimeTimer.Tick += TimeTimer_Tick;
+                TimeTimer.Start();
             });
         }
-
-
+        
 
         /// <summary>
         /// Timer event for COR timeout, turn off tx and ctcss and update display
@@ -787,20 +801,24 @@ namespace RadioRepeater
             TXPTTOff();
             TXCTCSSOff();
 
+            // Shut off the virtual RX indicator
+            rx = false;
+
             // turn off timer
-            //oo    MainPage.CORTimeout.Stop();
+            CORTimeout.Stop();
 
             // Output the time, and change to red.
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
+                RXText.Text = "Last RX timeout: " + DateTime.Now;
+                RX.Fill = yellowDot;
                 TXPTTText.Text = "Last PTT timeout: " + DateTime.Now;
-                TXPTT.Fill = redDot;
+                TXPTT.Fill = yellowDot;
                 TXCTCSSText.Text = "Last TXCTCSS timeout: " + DateTime.Now;
-                TXCTCSS.Fill = redDot;
+                TXCTCSS.Fill = yellowDot;
             });
         }
-
-
+        
 
         /// <summary>
         /// Timer to turn off the CWID timer
@@ -810,7 +828,7 @@ namespace RadioRepeater
         private async void CWIDPulse_Tick(object sender, object e)
         {
             // Turn off the pulse timer
-            //oo    MainPage.CWIDPulse.Stop();
+            CWIDPulse.Stop();
 
             // turn off the CW ID device
             if (TXCWIDActive)
@@ -829,23 +847,42 @@ namespace RadioRepeater
                 TXCWID.Fill = redDot;
             });
 
+            // if the RX is still active, restart the timer
+            if (rx)
+            {
+                CWIDTimerStart();
+            }
+            else
+            {
+                // shut off the timer
+                CWIDTimeout.Stop();
+            }
+
         }
 
         /// <summary>
         /// This will restart the CWID timer, if it's not already started
         /// </summary>
-        private void CWIDTimerStart()
+        private async void CWIDTimerStart()
         {
 
             // Setup the CWID timer
-            //oo     if (!MainPage.CWIDTimeout.IsEnabled)
-            //oo   {
-            // CWIDTimeout = new DispatcherTimer();
-            //oo     TimeSpan off = TXCWIDTimeout;
-            //oo       MainPage.CWIDTimeout.Interval = off;
-            //oo     MainPage.CWIDTimeout.Tick += CWIDTimeout_Tick;
-            //oo     MainPage.CWIDTimeout.Start();
-            //oo    }
+            if (!CWIDTimeout.IsEnabled)
+            {
+                CWIDTimeout = new DispatcherTimer();
+                TimeSpan cwidOff = TXCWIDTimeout;
+                CWIDTimeout.Interval = cwidOff;
+                CWIDTimeout.Tick += CWIDTimeout_Tick;
+                CWIDTimeout.Start();
+            }
+
+            // Output the time, and change to yellow.
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                TXCWIDText.Text = "Last CWID start: " + DateTime.Now;
+                TXCWID.Fill = yellowDot;
+            });
+
         }
 
 
@@ -855,16 +892,16 @@ namespace RadioRepeater
         private void CORTimerStart()
         {
             // Setup the RXCOR timer
-            //oo           if (!MainPage.CORTimeout.IsEnabled)
-            //oo        {
-            //CORTimeout = new DispatcherTimer();
-            //oo        TimeSpan off = RXCORTimeout;
-            //oo MainPage.CORTimeout.Interval = off;
-            //oo MainPage.CORTimeout.Tick += CORTimeout_Tick;
-            //oo  MainPage.CORTimeout.Start();
-            //oo     }
-
+            if (!CORTimeout.IsEnabled)
+                {
+                CORTimeout = new DispatcherTimer();
+                TimeSpan CORoff = RXCORTimeout;
+                CORTimeout.Interval = CORoff;
+                CORTimeout.Tick += CORTimeout_Tick;
+                CORTimeout.Start();
+                }
         }
+
 
         /// <summary>
         /// This will stop the COR timer
@@ -872,15 +909,11 @@ namespace RadioRepeater
         private void CORTimerStop()
         {
             // Setup the RXCOR timer
-            if (!MainPage.CORTimeout.IsEnabled)
+            if (!CORTimeout.IsEnabled)
             {
-                //oo          MainPage.CORTimeout.Stop();
+                CORTimeout.Stop();
             }
-
         }
-
-
-
 
     }
 }
