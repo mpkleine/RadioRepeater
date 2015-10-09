@@ -1,21 +1,16 @@
 ﻿using System;
 using Windows.Devices.Gpio;
-using System.Threading;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 using Windows.UI.Core;
 
+/// <summary>
+/// This program will run a Raspberry Pi 2 as a Radio Repeater.
+/// This device initially set up for a VHF to UHF for the SCARS group.
+/// All of this is documented on the GitHub site at: https://github.com/search?utf8=%E2%9C%93&q=radiorepeater
+/// Program written 10/2015 by Mark P Kleine, n5hzr
+/// </summary>
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -26,21 +21,23 @@ namespace RadioRepeater
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        // setup all of the timers
+        // Timer to keep track of the 'ragchew', or timeout timer. 
         public static DispatcherTimer CORTimeout;
+        // Timer to keep track of the 'CWID timer'
         public static DispatcherTimer CWIDTimeout;
+        // Timer to hold the CWID pulse to trigger the CWID'er
         public static DispatcherTimer CWIDPulse;
+        // Timer to hold the TXPTT for a bit on the unkey of the radio.
         public static DispatcherTimer PTTPulse;
-
+        // Timer to update the current time display on the monitor
         public static DispatcherTimer TimeTimer;
 
-
+        // Constant colors for the display panel
         private SolidColorBrush yellowDot = new SolidColorBrush(Windows.UI.Colors.Yellow);
         private SolidColorBrush redDot = new SolidColorBrush(Windows.UI.Colors.Red);
         private SolidColorBrush greenDot = new SolidColorBrush(Windows.UI.Colors.Green);
-
-
-        // used to transfer I/O info
+        
+        // hardware channels used to transfer I/O info
         private GpioPin RXCORChannel;
         private GpioPin RXCTCSSChannel;
         private GpioPin TXPTTChannel;
@@ -48,31 +45,40 @@ namespace RadioRepeater
         private GpioPin TXCWIDChannel;
         private GpioPinValue channelValue;
 
-        // synthesized RX signal (rxcor and rxctcss)
+        // synthesized RX signals (rxcor and rxctcss)
+        // used to test in the program so we don't have to worry about active high/low status
         bool rx = false;
         bool rxcor = false;
         bool rxctcss = false;
 
+        // Let's start this deal
         public MainPage()
         {
 
-            // Set up the timers
+            // Initialize the timers
             CORTimeout = new DispatcherTimer();
             CWIDTimeout = new DispatcherTimer();
             CWIDPulse = new DispatcherTimer();
             PTTPulse = new DispatcherTimer();
             TimeTimer = new DispatcherTimer();
 
-            var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
-
             this.InitializeComponent();
 
-            // Initialize the GPIO
+            // Override the ragchew timer, for demo
+            RXCORTimeout = TimeSpan.FromMinutes(.5);
+            // Ovverride the CWID Timeout Timer field for demo
+            TXCWIDTimeout = TimeSpan.FromMinutes(1);
+
+            // Override the CWID Hang pulse for demo
+            TXCWIDPulse = TimeSpan.FromMilliseconds(2000);
+            // Override the PTT Hang pulse for demo
+            TXPTTPulseField = TimeSpan.FromMilliseconds(2000);
+
+
+            // Initialize the GPIO and set up the event timers
             InitGPIO();
-
-
-
         }
+
 
         // make the RXCORpin a public item
         private int RXCORPinField = 5;
@@ -149,9 +155,6 @@ namespace RadioRepeater
             }
         }
 
-
-
-
         // make the RXCORActive a public item
         private bool RXCORActiveField = false;
 
@@ -168,8 +171,7 @@ namespace RadioRepeater
         }
 
         // make the RXCORTimeout a public item
-//        private TimeSpan RXCORTimeoutField = TimeSpan.FromMinutes(3);
-        private TimeSpan RXCORTimeoutField = TimeSpan.FromMinutes(.5);
+        private TimeSpan RXCORTimeoutField = TimeSpan.FromMinutes(3);
 
         public TimeSpan RXCORTimeout
         {
@@ -244,7 +246,7 @@ namespace RadioRepeater
         }
 
         // make TXCWIDPulse a public item
-        private TimeSpan TXCWIDPulseField = TimeSpan.FromMilliseconds(2000);
+        private TimeSpan TXCWIDPulseField = TimeSpan.FromMilliseconds(100);
 
         public TimeSpan TXCWIDPulse
         {
@@ -260,7 +262,7 @@ namespace RadioRepeater
 
 
         // make TXPTTPulse a public item
-        private TimeSpan TXPTTPulseField = TimeSpan.FromMilliseconds(2000);
+        private TimeSpan TXPTTPulseField = TimeSpan.FromMilliseconds(100);
 
         public TimeSpan TXPTTPulse
         {
@@ -274,9 +276,9 @@ namespace RadioRepeater
             }
         }
 
+
         // make TXCWIDTimeout a public item
-        //        private TimeSpan TXCWIDTimeoutField = TimeSpan.FromMinutes(9.75);
-        private TimeSpan TXCWIDTimeoutField = TimeSpan.FromMinutes(1);
+        private TimeSpan TXCWIDTimeoutField = TimeSpan.FromMinutes(9.75);
 
         public TimeSpan TXCWIDTimeout
         {
@@ -715,8 +717,6 @@ namespace RadioRepeater
                 TXCTCSSText.Text = "Last TXCTCSS off: " + DateTime.Now;
                 TXCTCSS.Fill = redDot;
             });
-
-
         }
 
 
@@ -744,9 +744,8 @@ namespace RadioRepeater
                 TXCTCSSText.Text = "Last TXCTCSS on: " + DateTime.Now;
                 TXCTCSS.Fill = greenDot;
             });
-
-
         }
+
 
         /// <summary>
         /// This starts a CWID cycle.
@@ -784,8 +783,8 @@ namespace RadioRepeater
                 TXCWIDText.Text = "Last CWID on: " + DateTime.Now;
                 TXCWID.Fill = greenDot;
             });
-
         }
+
 
         /// <summary>
         /// Timer event for Time timer
@@ -794,7 +793,6 @@ namespace RadioRepeater
         /// <param name="e"></param>
         private async void TimeTimer_Tick(object sender, object e)
         {
-
             // Update the time
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
@@ -841,13 +839,14 @@ namespace RadioRepeater
                 TXCTCSS.Fill = yellowDot;
             });
         }
-        
+
 
         /// <summary>
         /// Timer to turn off the CWID timer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+
         private async void CWIDPulse_Tick(object sender, object e)
         {
             // Turn off the pulse timer
@@ -880,8 +879,8 @@ namespace RadioRepeater
                 // shut off the timer
                 CWIDTimeout.Stop();
             }
-
         }
+
 
         /// <summary>
         /// This will restart the CWID timer, if it's not already started
@@ -889,7 +888,6 @@ namespace RadioRepeater
         private async void CWIDTimerStart()
         {
 
-            // Setup the CWID timer
             if (!CWIDTimeout.IsEnabled)
             {
                 CWIDTimeout = new DispatcherTimer();
@@ -897,7 +895,6 @@ namespace RadioRepeater
                 CWIDTimeout.Interval = cwidOff;
                 CWIDTimeout.Tick += CWIDTimeout_Tick;
                 CWIDTimeout.Start();
-            }
 
             // Output the time, and change to yellow.
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -905,7 +902,7 @@ namespace RadioRepeater
                 TXCWIDText.Text = "Last CWID start: " + DateTime.Now;
                 TXCWID.Fill = yellowDot;
             });
-
+            }
         }
 
 
@@ -932,6 +929,7 @@ namespace RadioRepeater
             CORTimeout.Stop();
         }
 
+
         /// <summary>
         /// Timer to extend the PTT on unkey to allow CTCSS to shut off first
         /// </summary>
@@ -942,7 +940,7 @@ namespace RadioRepeater
             // Turn off the pulse timer
             PTTPulse.Stop();
 
-            // if the RX is still active, restart the timer
+            // if the RX hasn't been turned on again, turn off the PTT
             if (!rx)
             {
                 // Turn off the PTT line
@@ -965,7 +963,6 @@ namespace RadioRepeater
             });
             }
         }
-
 
 
     }
