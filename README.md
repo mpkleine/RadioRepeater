@@ -15,6 +15,13 @@ This program to provide a 10 minute TX CW Identification signal. The timing
 of this can be configured from config file. The output pulse length is set 
 to 100 ms, and is configurable via the config file.
 
+There's a PTT drop timer that will hold the TX PTT up for a given amount of 
+time, so that the CTCSS will disconnect at the far end before the squelch
+kicks in, and blasts the end user.
+
+There's a pulse timer that lets the CWID pulse width to be assigned by the
+user.
+
 All inputs and outputs are configured to use/accept either active High, or 
 active Low inputs, based on a configuration setting.
 
@@ -39,14 +46,14 @@ was toggled off/on.
 
 Raspberry Pi 2 - GPIO pin-out connections:
 
-GPIO 1 - RX COR input (from Kenwood xxx receiver radio) (active high, or low, configurable)
+GPIO 5 - RX COR input (from Kenwood xxx receiver radio) (active high, or low, configurable)
 
-GPIO 2 - RX CTCSS input (from Comspec, or Kenwood radio, not sure which) (active high, or low, configurable)
+GPIO 6 - RX CTCSS input (from Comspec, or Kenwood radio, not sure which) (active high, or low, configurable)
 
-GPIO 3 - TX PTT Output (to Kenwood transmitter radio) (active low, but configurable)
+GPIO 12 - TX PTT Output (to Kenwood transmitter radio) (active low, but configurable)
 
-GPIO 4 - TX CTCSS Output (active low, but configurable)
+GPIO 13 - TX CTCSS Output (active low, but configurable)
 
-GPIO 5 - TX CW Identification device (active low, but configurable at either end)
+GPIO 16 - TX CW Identification device (active low, but configurable at either end)
 
-GPIO pin configuration is soft coded, and can be modified by the configuration file.
+GPIO pin configuration is soft coded, and can be modified by configuration.
