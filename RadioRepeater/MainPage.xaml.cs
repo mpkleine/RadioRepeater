@@ -31,6 +31,7 @@ namespace RadioRepeater
         public static DispatcherTimer CWIDTimeout;
         public static DispatcherTimer CWIDPulse;
 
+        public static DispatcherTimer TimeTimer;
 
 
 
@@ -58,6 +59,7 @@ namespace RadioRepeater
             CORTimeout = new DispatcherTimer();
             CWIDTimeout = new DispatcherTimer();
             CWIDPulse = new DispatcherTimer();
+            TimeTimer = new DispatcherTimer();
 
             var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
 
@@ -278,6 +280,9 @@ namespace RadioRepeater
                 RX.Fill = redDot;
             });
 
+            // Setup the current time, and create timer to keep updating it.
+            await SetupDisplayTime();
+
             var gpio = GpioController.GetDefault();
 
             // Show an error if there is no GPIO controller
@@ -377,6 +382,26 @@ namespace RadioRepeater
             RXCTCSSChannel.ValueChanged += RXCTCSSPin_ValueChanged;
 
 
+        }
+
+        /// <summary>
+        /// This will display the current time, and create a timer 
+        /// to update the current time every minute
+        /// </summary>
+        /// <returns></returns>
+        private async System.Threading.Tasks.Task SetupDisplayTime()
+        {
+            // Fill in the current time, and set up the ticker to update the current time.
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                TimeText.Text = DateTime.Now.ToString("MM-dd-yyyy HH:mm");
+            });
+
+            // Setup the Time Ticker, to update the display screen
+            TimeTimer = new DispatcherTimer();
+            TimeSpan timeSec = TimeSpan.FromMinutes(1);
+            TimeTimer.Tick += TimeTimer_Tick;
+            TimeTimer.Start();
         }
 
         /// <summary>
@@ -733,6 +758,23 @@ namespace RadioRepeater
             });
 
         }
+
+        /// <summary>
+        /// Timer event for Time timer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void TimeTimer_Tick(object sender, object e)
+        {
+
+            // Update the time
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                TimeText.Text = DateTime.Now.ToString("MM-dd-yyyy HH:mm");
+            });
+        }
+
+
 
         /// <summary>
         /// Timer event for COR timeout, turn off tx and ctcss and update display

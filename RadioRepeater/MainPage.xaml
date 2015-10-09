@@ -23,10 +23,9 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock x:Name="title" Foreground="Red" Text="N5HZR Radio Repeater" Margin="10" TextAlignment="Center" FontSize="70" />
+            <TextBlock x:Name="title" Foreground="Red" Text="N5HZR Radio Repeater" Margin="10" TextAlignment="Center" FontSize="60" />
+            <TextBlock x:Name="TimeText" Foreground="White" Text="12:00:00" Margin="10" TextAlignment="Right" FontSize="26.667" />
         </StackPanel>
-
-
         <StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock x:Name="RXText" Foreground="White" Text="RXText" Margin="10" TextAlignment="Center" FontSize="26.667" />
         </StackPanel>
