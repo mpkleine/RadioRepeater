@@ -212,6 +212,7 @@ namespace RadioRepeater.RadioRepeater_XamlTypeInfo
                 userType.AddMemberName("TXCTCSSActive");
                 userType.AddMemberName("TXCWIDActive");
                 userType.AddMemberName("TXCWIDPulse");
+                userType.AddMemberName("TXPTTPulse");
                 userType.AddMemberName("TXCWIDTimeout");
                 userType.SetIsLocalType();
                 xamlType = userType;
@@ -372,12 +373,22 @@ namespace RadioRepeater.RadioRepeater_XamlTypeInfo
             var that = (global::RadioRepeater.MainPage)instance;
             that.TXCWIDPulse = (global::System.TimeSpan)Value;
         }
-        private object get_12_MainPage_TXCWIDTimeout(object instance)
+        private object get_12_MainPage_TXPTTPulse(object instance)
+        {
+            var that = (global::RadioRepeater.MainPage)instance;
+            return that.TXPTTPulse;
+        }
+        private void set_12_MainPage_TXPTTPulse(object instance, object Value)
+        {
+            var that = (global::RadioRepeater.MainPage)instance;
+            that.TXPTTPulse = (global::System.TimeSpan)Value;
+        }
+        private object get_13_MainPage_TXCWIDTimeout(object instance)
         {
             var that = (global::RadioRepeater.MainPage)instance;
             return that.TXCWIDTimeout;
         }
-        private void set_12_MainPage_TXCWIDTimeout(object instance, object Value)
+        private void set_13_MainPage_TXCWIDTimeout(object instance, object Value)
         {
             var that = (global::RadioRepeater.MainPage)instance;
             that.TXCWIDTimeout = (global::System.TimeSpan)Value;
@@ -462,11 +473,17 @@ namespace RadioRepeater.RadioRepeater_XamlTypeInfo
                 xamlMember.Getter = get_11_MainPage_TXCWIDPulse;
                 xamlMember.Setter = set_11_MainPage_TXCWIDPulse;
                 break;
+            case "RadioRepeater.MainPage.TXPTTPulse":
+                userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.MainPage");
+                xamlMember = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlMember(this, "TXPTTPulse", "TimeSpan");
+                xamlMember.Getter = get_12_MainPage_TXPTTPulse;
+                xamlMember.Setter = set_12_MainPage_TXPTTPulse;
+                break;
             case "RadioRepeater.MainPage.TXCWIDTimeout":
                 userType = (global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlUserType)GetXamlTypeByName("RadioRepeater.MainPage");
                 xamlMember = new global::RadioRepeater.RadioRepeater_XamlTypeInfo.XamlMember(this, "TXCWIDTimeout", "TimeSpan");
-                xamlMember.Getter = get_12_MainPage_TXCWIDTimeout;
-                xamlMember.Setter = set_12_MainPage_TXCWIDTimeout;
+                xamlMember.Getter = get_13_MainPage_TXCWIDTimeout;
+                xamlMember.Setter = set_13_MainPage_TXCWIDTimeout;
                 break;
             }
             return xamlMember;

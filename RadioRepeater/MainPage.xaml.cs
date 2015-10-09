@@ -30,6 +30,7 @@ namespace RadioRepeater
         public static DispatcherTimer CORTimeout;
         public static DispatcherTimer CWIDTimeout;
         public static DispatcherTimer CWIDPulse;
+        public static DispatcherTimer PTTPulse;
 
         public static DispatcherTimer TimeTimer;
 
@@ -59,6 +60,7 @@ namespace RadioRepeater
             CORTimeout = new DispatcherTimer();
             CWIDTimeout = new DispatcherTimer();
             CWIDPulse = new DispatcherTimer();
+            PTTPulse = new DispatcherTimer();
             TimeTimer = new DispatcherTimer();
 
             var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
@@ -257,8 +259,23 @@ namespace RadioRepeater
         }
 
 
+        // make TXPTTPulse a public item
+        private TimeSpan TXPTTPulseField = TimeSpan.FromMilliseconds(2000);
+
+        public TimeSpan TXPTTPulse
+        {
+            get
+            {
+                return TXPTTPulseField;
+            }
+            set
+            {
+                TXPTTPulseField = value;
+            }
+        }
+
         // make TXCWIDTimeout a public item
-//        private TimeSpan TXCWIDTimeoutField = TimeSpan.FromMinutes(9.75);
+        //        private TimeSpan TXCWIDTimeoutField = TimeSpan.FromMinutes(9.75);
         private TimeSpan TXCWIDTimeoutField = TimeSpan.FromMinutes(1);
 
         public TimeSpan TXCWIDTimeout
@@ -466,7 +483,10 @@ namespace RadioRepeater
                 {
                     CORTimerStop();
                 });
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
                 TXPTTOff();
+                });
                 TXCTCSSOff();
 
             }
@@ -567,7 +587,10 @@ namespace RadioRepeater
                 {
                     CORTimerStop();
                 });
-                TXPTTOff();
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    TXPTTOff();
+                });
                 TXCTCSSOff();
 
             }
@@ -619,22 +642,18 @@ namespace RadioRepeater
 
         private async void TXPTTOff()
         {
-            if (TXPTTActive)
-            {
-                channelValue = GpioPinValue.Low;
-            }
-            else
-            {
-                channelValue = GpioPinValue.High;
-            }
-            TXPTTChannel.Write(channelValue);
-            TXPTTChannel.SetDriveMode(GpioPinDriveMode.Output);
-
-            // Output the time, and change to red.
+            // Setup the PTT pulse, to delay PTT off time
+            PTTPulse = new DispatcherTimer();
+            TimeSpan PTTPulseoff = TXPTTPulse;
+            PTTPulse.Interval = PTTPulseoff;
+            PTTPulse.Tick += PTTPulse_Tick;
+            PTTPulse.Start();
+            
+            // Output the time, and change to yellow
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                TXPTTText.Text = "Last TXPTT off: " + DateTime.Now;
-                TXPTT.Fill = redDot;
+                TXPTTText.Text = "Last TXPTT unkey: " + DateTime.Now;
+                TXPTT.Fill = yellowDot;
             });
         }
 
@@ -798,7 +817,10 @@ namespace RadioRepeater
         private async void CORTimeout_Tick(object sender, object e)
         {
             // turn off TX
-            TXPTTOff();
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                TXPTTOff();
+            });
             TXCTCSSOff();
 
             // Shut off the virtual RX indicator
@@ -908,6 +930,42 @@ namespace RadioRepeater
             // Setup the RXCOR timer
             CORTimeout.Stop();
         }
+
+        /// <summary>
+        /// Timer to extend the PTT on unkey to allow CTCSS to shut off first
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void PTTPulse_Tick(object sender, object e)
+        {
+            // Turn off the pulse timer
+            PTTPulse.Stop();
+
+            // if the RX is still active, restart the timer
+            if (!rx)
+            {
+                // Turn off the PTT line
+                if (TXPTTActive)
+                {
+                    channelValue = GpioPinValue.Low;
+                }
+                else
+                {
+                    channelValue = GpioPinValue.High;
+                }
+                TXPTTChannel.Write(channelValue);
+                TXPTTChannel.SetDriveMode(GpioPinDriveMode.Output);
+
+                // Output the time, and change to red.
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                TXPTTText.Text = "Last PTT off: " + DateTime.Now;
+                TXPTT.Fill = redDot;
+            });
+            }
+        }
+
+
 
     }
 }
