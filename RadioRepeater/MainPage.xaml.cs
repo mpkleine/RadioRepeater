@@ -413,7 +413,7 @@ namespace RadioRepeater
             // Fill in the current time, and set up the ticker to update the current time.
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                TimeText.Text = DateTime.Now.ToString();
+                TimeText.Text = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
             });
 
             // Setup the Time Ticker, to update the display screen
@@ -798,11 +798,12 @@ namespace RadioRepeater
             // Update the time
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                TimeText.Text = DateTime.Now.ToString();
+                TimeText.Text = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
                 // Setup the Time Ticker, to update the display screen
                 TimeTimer.Stop();
                 TimeTimer = new DispatcherTimer();
                 TimeSpan timeSec = TimeSpan.FromMinutes(1);
+                TimeTimer.Interval = timeSec;
                 TimeTimer.Tick += TimeTimer_Tick;
                 TimeTimer.Start();
             });
