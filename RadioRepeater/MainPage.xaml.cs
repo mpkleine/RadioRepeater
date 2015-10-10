@@ -36,7 +36,7 @@ namespace RadioRepeater
         private SolidColorBrush yellowDot = new SolidColorBrush(Windows.UI.Colors.Yellow);
         private SolidColorBrush redDot = new SolidColorBrush(Windows.UI.Colors.Red);
         private SolidColorBrush greenDot = new SolidColorBrush(Windows.UI.Colors.Green);
-        
+
         // hardware channels used to transfer I/O info
         private GpioPin RXCORChannel;
         private GpioPin RXCTCSSChannel;
@@ -72,7 +72,7 @@ namespace RadioRepeater
             // Override the CWID Hang pulse for demo
             TXCWIDPulse = TimeSpan.FromMilliseconds(2000);
             // Override the PTT Hang pulse for demo
-            TXPTTPulseField = TimeSpan.FromMilliseconds(2000);
+            TXPTTPulse = TimeSpan.FromMilliseconds(2000);
 
 
             // Initialize the GPIO and set up the event timers
@@ -323,8 +323,6 @@ namespace RadioRepeater
                 RXCOR.Fill = redDot;
             });
 
-            //            RXCORChannel.ValueChanged += RXCORPin_ValueChanged;
-
 
             // Set up the input RXCTCSS line
             RXCTCSSChannel = gpio.OpenPin(RXCTCSSPin);
@@ -335,9 +333,6 @@ namespace RadioRepeater
                 RXCTCSSText.Text = "RXCTCSS Startup: " + DateTime.Now;
                 RXCTCSS.Fill = redDot;
             });
-
-            //   RXCTCSSChannel.ValueChanged += RXCTCSSPin_ValueChanged;
-
 
             // Set up, and turn off TXPTT to start
             TXPTTChannel = gpio.OpenPin(TXPTTPin);
@@ -358,7 +353,6 @@ namespace RadioRepeater
 
             TXPTTChannel.SetDriveMode(GpioPinDriveMode.Output);
 
-
             // Set up, and turn off CTCSS to start
             TXCTCSSChannel = gpio.OpenPin(TXCTCSSPin);
             if (TXCTCSSActive)
@@ -377,7 +371,6 @@ namespace RadioRepeater
             });
 
             TXCTCSSChannel.SetDriveMode(GpioPinDriveMode.Output);
-
 
             // Set up, and turn off CWID to start
             TXCWIDChannel = gpio.OpenPin(TXCWIDPin);
@@ -487,7 +480,7 @@ namespace RadioRepeater
                 });
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                TXPTTOff();
+                    TXPTTOff();
                 });
                 TXCTCSSOff();
 
@@ -533,6 +526,7 @@ namespace RadioRepeater
                 });
             }
         }
+
 
         /// <summary>
         /// This is the event from the inbound CTCSS line. If the COR line is active, 
@@ -594,7 +588,6 @@ namespace RadioRepeater
                     TXPTTOff();
                 });
                 TXCTCSSOff();
-
             }
 
             // Update display 
@@ -638,6 +631,7 @@ namespace RadioRepeater
             }
         }
 
+
         /// <summary>
         /// This will turn off the TX radio and update the display.
         /// </summary>
@@ -646,11 +640,10 @@ namespace RadioRepeater
         {
             // Setup the PTT pulse, to delay PTT off time
             PTTPulse = new DispatcherTimer();
-            TimeSpan PTTPulseoff = TXPTTPulse;
-            PTTPulse.Interval = PTTPulseoff;
+            PTTPulse.Interval = TXPTTPulse;
             PTTPulse.Tick += PTTPulse_Tick;
             PTTPulse.Start();
-            
+
             // Output the time, and change to yellow
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
@@ -806,7 +799,7 @@ namespace RadioRepeater
                 TimeTimer.Start();
             });
         }
-        
+
 
         /// <summary>
         /// Timer event for COR timeout, turn off tx and ctcss and update display
@@ -896,12 +889,12 @@ namespace RadioRepeater
                 CWIDTimeout.Tick += CWIDTimeout_Tick;
                 CWIDTimeout.Start();
 
-            // Output the time, and change to yellow.
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                TXCWIDText.Text = "Last CWID start: " + DateTime.Now;
-                TXCWID.Fill = yellowDot;
-            });
+                // Output the time, and change to yellow.
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    TXCWIDText.Text = "Last CWID start: " + DateTime.Now;
+                    TXCWID.Fill = yellowDot;
+                });
             }
         }
 
