@@ -6,5 +6,6 @@
     <RemoteDebugEnabled>true</RemoteDebugEnabled>
     <UseAuthentication>false</UseAuthentication>
     <RemoteDebugMachine>SunTimer2</RemoteDebugMachine>
+    <CreateCleanLayout>true</CreateCleanLayout>
   </PropertyGroup>
 </Project>

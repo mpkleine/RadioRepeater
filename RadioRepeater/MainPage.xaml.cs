@@ -933,7 +933,7 @@ namespace RadioRepeater
             // Turn off the pulse timer
             PTTPulse.Stop();
 
-            // if the RX hasn't been turned on again, turn off the PTT
+            // turn off the PTT, as long as receiver hasn't been keyed in the mean time
             if (!rx)
             {
                 // Turn off the PTT line
