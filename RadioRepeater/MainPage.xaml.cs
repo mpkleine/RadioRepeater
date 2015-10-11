@@ -383,18 +383,18 @@ namespace RadioRepeater
                 channelValue = GpioPinValue.High;
             }
             TXCWIDChannel.Write(channelValue);
+            TXCWIDChannel.SetDriveMode(GpioPinDriveMode.Output);
+
+            // Update the screen info
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 TXCWIDText.Text = "TXCWID Startup: " + DateTime.Now;
                 TXCWID.Fill = redDot;
             });
 
-            TXCWIDChannel.SetDriveMode(GpioPinDriveMode.Output);
-
-            // Wait until everything stabilizes, and then start the RX triggers
+            // Now that all is up and running, and then start the RX triggers
             RXCORChannel.ValueChanged += RXCORPin_ValueChanged;
             RXCTCSSChannel.ValueChanged += RXCTCSSPin_ValueChanged;
-
 
         }
 
@@ -408,7 +408,7 @@ namespace RadioRepeater
             // Fill in the current time, and set up the ticker to update the current time.
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                TimeText.Text = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
+                TimeText.Text = DateTime.Now.ToString();
             });
 
             // Setup the Time Ticker, to update the display screen
@@ -789,7 +789,7 @@ namespace RadioRepeater
             // Update the time
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                TimeText.Text = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
+                TimeText.Text = DateTime.Now.ToString();
                 // Setup the Time Ticker, to update the display screen
                 TimeTimer.Stop();
                 TimeTimer = new DispatcherTimer();
@@ -802,26 +802,30 @@ namespace RadioRepeater
 
 
         /// <summary>
-        /// Timer event for COR timeout, turn off tx and ctcss and update display
+        /// Timer event for COR timeout, turn off ctcss, 
+        /// start the timer for the TX PTT turnoff and update display
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private async void CORTimeout_Tick(object sender, object e)
         {
-            // turn off TX
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                TXPTTOff();
-            });
-            TXCTCSSOff();
 
             // Shut off the virtual RX indicator
             rx = false;
 
+            // turn off CTCSS
+            TXCTCSSOff();
+
+            // Start timer to turn off TX PTT
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                TXPTTOff();
+            });
+
             // turn off timer
             CORTimeout.Stop();
 
-            // Output the time, and change to red.
+            // Output the time, and change to yellow/red.
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 RXText.Text = "Last RX timeout: " + DateTime.Now;
@@ -854,6 +858,8 @@ namespace RadioRepeater
             {
                 channelValue = GpioPinValue.High;
             }
+            TXCWIDChannel.Write(channelValue);
+            TXCWIDChannel.SetDriveMode(GpioPinDriveMode.Output);
 
             // Output the time, and change to red.
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -900,7 +906,7 @@ namespace RadioRepeater
 
 
         /// <summary>
-        /// This will restart the COR timer, if it's not already started
+        /// This will start the COR timer
         /// </summary>
         private void CORTimerStart()
         {
@@ -918,7 +924,7 @@ namespace RadioRepeater
         /// </summary>
         private void CORTimerStop()
         {
-            // Setup the RXCOR timer
+            // Stop the RXCOR timer
             CORTimeout.Stop();
         }
 
