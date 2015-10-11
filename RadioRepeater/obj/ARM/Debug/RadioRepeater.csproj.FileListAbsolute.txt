@@ -433,3 +433,6 @@ C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\ARM\Debug\Core\Ass
 C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\ARM\Debug\Core\RadioRepeater.xr.xml
 C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\ARM\Debug\Core\WinMetadata\Windows.winmd
 C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\ARM\Debug\Core\resources.pri
+C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\bin\ARM\Debug\Core\Assets\Images\Tower.gif
+C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\ARM\Debug\RadioRepeater.csprojResolveAssemblyReference.cache
+C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\obj\ARM\Debug\Core\Assets\Images\Tower.gif

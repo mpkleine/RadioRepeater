@@ -21,6 +21,9 @@
     <AppxPackagedFile Include="C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\bin\ARM\Debug\Core\ApplicationInsights.config">
       <PackagePath>ApplicationInsights.config</PackagePath>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\bin\ARM\Debug\Core\Assets\Images\Tower.gif">
+      <PackagePath>Assets\Images\Tower.gif</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dev\Documents\GitHub\RadioRepeater\RadioRepeater\bin\ARM\Debug\Core\Assets\LockScreenLogo.scale-200.png">
       <PackagePath>Assets\LockScreenLogo.scale-200.png</PackagePath>
     </AppxPackagedFile>
