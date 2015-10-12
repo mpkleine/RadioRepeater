@@ -32,10 +32,6 @@ namespace RadioRepeater
         // Timer to update the current time display on the monitor
         public static DispatcherTimer TimeTimer;
 
-        // Timer to generate test pulses that can be used to demo the program
-        public static DispatcherTimer TestTimer;
-
-
         // Constant colors for the display panel
         private SolidColorBrush yellowDot = new SolidColorBrush(Windows.UI.Colors.Yellow);
         private SolidColorBrush redDot = new SolidColorBrush(Windows.UI.Colors.Red);
@@ -47,7 +43,6 @@ namespace RadioRepeater
         private GpioPin TXPTTChannel;
         private GpioPin TXCTCSSChannel;
         private GpioPin TXCWIDChannel;
-        private GpioPin TestChannel;
         private GpioPinValue channelValue;
 
         // synthesized RX signals (rxcor and rxctcss)
@@ -55,10 +50,6 @@ namespace RadioRepeater
         bool rx = false;
         bool rxcor = false;
         bool rxctcss = false;
-
-        // variables for the test routine
-        bool teststatus = false;
-        static Random _r = new Random();
 
         // Let's start this deal
         public MainPage()
@@ -69,8 +60,7 @@ namespace RadioRepeater
             CWIDPulse = new DispatcherTimer();
             PTTPulse = new DispatcherTimer();
             TimeTimer = new DispatcherTimer();
-            TestTimer = new DispatcherTimer();
-
+            
             this.InitializeComponent();
 
             // Override the ragchew timer, for demo
@@ -324,9 +314,6 @@ namespace RadioRepeater
                 return;
             }
 
-            // Set up the GPIO channel for the test info
-            TestChannel = gpio.OpenPin(26);
-
             // Set up the input RXCOR line
             RXCORChannel = gpio.OpenPin(RXCORPin);
             RXCORChannel.SetDriveMode(GpioPinDriveMode.Input);
@@ -410,12 +397,6 @@ namespace RadioRepeater
             RXCORChannel.ValueChanged += RXCORPin_ValueChanged;
             RXCTCSSChannel.ValueChanged += RXCTCSSPin_ValueChanged;
 
-            // Setup the Test timer
-            TimeSpan Testoff = TimeSpan.FromSeconds(12);
-            TestTimer.Interval = Testoff;
-            TestTimer.Tick += TestTimer_Tick;
-            TestTimer.Start();
-
         }
 
         /// <summary>
@@ -484,9 +465,15 @@ namespace RadioRepeater
                 // Setup the CWID timer, if not already running
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    TXPTTOn();
-                    TXCTCSSOn();
-                    CORTimeoutStart();
+                TXPTTOn();
+                });
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        TXCTCSSOn();
+                    });
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            CORTimeoutStart();
                 });
             }
             else
@@ -496,7 +483,13 @@ namespace RadioRepeater
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     TXPTTOff();
+                });
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
                     TXCTCSSOff();
+                });
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
                     CORTimeoutStop();
                 });
 
@@ -587,8 +580,14 @@ namespace RadioRepeater
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     TXPTTOn();
-                    TXCTCSSOn();
-                    CORTimeoutStart();
+                });
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        TXCTCSSOn();
+                    });
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            CORTimeoutStart();
                 });
             }
             else
@@ -598,8 +597,14 @@ namespace RadioRepeater
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     TXPTTOff();
-                    TXCTCSSOff();
-                    CORTimeoutStop();
+                });
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        TXCTCSSOff();
+                    });
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            CORTimeoutStop();
                 });
             }
 
@@ -969,41 +974,6 @@ namespace RadioRepeater
                 TXPTT.Fill = redDot;
             });
             }
-        }
-
-        /// <summary>
-        /// This routine handles the output test signal to pin 26
-        /// Jumper the COR and CTCSS pins to this line to run the test
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-
-        private void TestTimer_Tick(object sender, object e)
-        {
-//            TestTimer.Stop();
-            if (teststatus)
-            {
-                teststatus = false;
-//                int n = _r.Next(10) + 30;
-         //       int n = 15;
-   //             TestTimer.Interval = TimeSpan.FromSeconds(n);
-                channelValue = GpioPinValue.Low;
-            }
-            else
-            {
-                teststatus = true;
-//                int n = _r.Next(10);
-       //         int n = 5;
- //               TestTimer.Interval = TimeSpan.FromSeconds(n);
-                channelValue = GpioPinValue.High;
-            }
-
-            // change the interval
-     //       TestTimer.Start();
-
-            // output the test pin info status
-            TestChannel.Write(channelValue);
-            TestChannel.SetDriveMode(GpioPinDriveMode.Output);
         }
 
 
