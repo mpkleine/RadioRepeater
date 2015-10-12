@@ -330,7 +330,7 @@ namespace RadioRepeater
             // Set up the input RXCOR line
             RXCORChannel = gpio.OpenPin(RXCORPin);
             RXCORChannel.SetDriveMode(GpioPinDriveMode.Input);
-            RXCORChannel.DebounceTimeout = TimeSpan.FromMilliseconds(50);
+            RXCORChannel.DebounceTimeout = TimeSpan.FromMilliseconds(15);
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 RXCORText.Text = "RXCOR Startup: " + DateTime.Now;
@@ -341,7 +341,7 @@ namespace RadioRepeater
             // Set up the input RXCTCSS line
             RXCTCSSChannel = gpio.OpenPin(RXCTCSSPin);
             RXCTCSSChannel.SetDriveMode(GpioPinDriveMode.Input);
-            RXCTCSSChannel.DebounceTimeout = TimeSpan.FromMilliseconds(50);
+            RXCTCSSChannel.DebounceTimeout = TimeSpan.FromMilliseconds(15);
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 RXCTCSSText.Text = "RXCTCSS Startup: " + DateTime.Now;
@@ -485,8 +485,8 @@ namespace RadioRepeater
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     TXPTTOn();
-                    CORTimerStart();
                     TXCTCSSOn();
+                    CORTimeoutStart();
                 });
             }
             else
@@ -496,8 +496,8 @@ namespace RadioRepeater
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     TXPTTOff();
-                    CORTimeoutStop();
                     TXCTCSSOff();
+                    CORTimeoutStop();
                 });
 
             }
@@ -587,8 +587,8 @@ namespace RadioRepeater
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     TXPTTOn();
-                    CORTimerStart();
                     TXCTCSSOn();
+                    CORTimeoutStart();
                 });
             }
             else
@@ -598,8 +598,8 @@ namespace RadioRepeater
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     TXPTTOff();
-                    CORTimeoutStop();
                     TXCTCSSOff();
+                    CORTimeoutStop();
                 });
             }
 
@@ -917,7 +917,7 @@ namespace RadioRepeater
         /// <summary>
         /// This will start the COR timer
         /// </summary>
-        private void CORTimerStart()
+        private void CORTimeoutStart()
         {
             // Setup the RXCOR timer
             TimeSpan CORoff = RXCORTimeout;
@@ -984,14 +984,16 @@ namespace RadioRepeater
             if (teststatus)
             {
                 teststatus = false;
-                int n = _r.Next(10);
+//                int n = _r.Next(10) + 30;
+                int n = 15;
                 TestTimer.Interval = TimeSpan.FromSeconds(n);
                 channelValue = GpioPinValue.Low;
             }
             else
             {
                 teststatus = true;
-                int n = _r.Next(10) + 30;
+//                int n = _r.Next(10);
+                int n = 5;
                 TestTimer.Interval = TimeSpan.FromSeconds(n);
                 channelValue = GpioPinValue.High;
             }
