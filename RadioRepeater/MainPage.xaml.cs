@@ -980,26 +980,26 @@ namespace RadioRepeater
 
         private void TestTimer_Tick(object sender, object e)
         {
-            TestTimer.Stop();
+//            TestTimer.Stop();
             if (teststatus)
             {
                 teststatus = false;
 //                int n = _r.Next(10) + 30;
-                int n = 15;
-                TestTimer.Interval = TimeSpan.FromSeconds(n);
+         //       int n = 15;
+   //             TestTimer.Interval = TimeSpan.FromSeconds(n);
                 channelValue = GpioPinValue.Low;
             }
             else
             {
                 teststatus = true;
 //                int n = _r.Next(10);
-                int n = 5;
-                TestTimer.Interval = TimeSpan.FromSeconds(n);
+       //         int n = 5;
+ //               TestTimer.Interval = TimeSpan.FromSeconds(n);
                 channelValue = GpioPinValue.High;
             }
 
             // change the interval
-            TestTimer.Start();
+     //       TestTimer.Start();
 
             // output the test pin info status
             TestChannel.Write(channelValue);
