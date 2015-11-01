@@ -33,7 +33,7 @@
             <TextBlock x:Name="RXText" Foreground="White" Text="RXText" Margin="10" TextAlignment="Left" FontSize="26.667" />
         </StackPanel>
         <StackPanel Grid.Row="2" Grid.Column="2" VerticalAlignment="Center">
-            <TextBlock x:Name="RXCORText" Foreground="White" Text="RXCORText" Margin="10" TextAlignment="Left" FontSize="26.667" />
+            <TextBlock x:Name="RXCOSText" Foreground="White" Text="RXCORText" Margin="10" TextAlignment="Left" FontSize="26.667" />
         </StackPanel>
         <StackPanel Grid.Row="3" Grid.Column="2" VerticalAlignment="Center">
             <TextBlock x:Name="RXCTCSSText" Foreground="White" Text="RXCTCSSText" Margin="10" TextAlignment="Left" FontSize="26.667" />
@@ -52,7 +52,7 @@
             <Ellipse x:Name="RX" Fill="LightGray" Stroke="White" Width="100" Height="100" Margin="10"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Ellipse x:Name="RXCOR" Fill="LightGray" Stroke="White" Width="100" Height="100" Margin="10"/>
+            <Ellipse x:Name="RXCOS" Fill="LightGray" Stroke="White" Width="100" Height="100" Margin="10"/>
         </StackPanel>
         <StackPanel Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Ellipse x:Name="RXCTCSS" Fill="LightGray" Stroke="White" Width="100" Height="100" Margin="10"/>

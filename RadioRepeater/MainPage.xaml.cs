@@ -22,7 +22,7 @@ namespace RadioRepeater
     public sealed partial class MainPage : Page
     {
         // Timer to keep track of the 'ragchew', or timeout timer. 
-        public static DispatcherTimer CORTimeout;
+        public static DispatcherTimer COSTimeout;
         // Timer to keep track of the 'CWID timer'
         public static DispatcherTimer CWIDTimeout;
         // Timer to hold the CWID pulse to trigger the CWID'er
@@ -38,33 +38,33 @@ namespace RadioRepeater
         private SolidColorBrush greenDot = new SolidColorBrush(Windows.UI.Colors.Green);
 
         // hardware channels used to transfer I/O info
-        private GpioPin RXCORChannel;
+        private GpioPin RXCOSChannel;
         private GpioPin RXCTCSSChannel;
         private GpioPin TXPTTChannel;
         private GpioPin TXCTCSSChannel;
         private GpioPin TXCWIDChannel;
         private GpioPinValue channelValue;
 
-        // synthesized RX signals (rxcor and rxctcss)
+        // synthesized RX signals (rxcos and rxctcss)
         // used to test in the program so we don't have to worry about active high/low status
         bool rx = false;
-        bool rxcor = false;
+        bool rxcos = false;
         bool rxctcss = false;
 
         // Let's start this deal
         public MainPage()
         {
             // Initialize the timers
-            CORTimeout = new DispatcherTimer();
+            COSTimeout = new DispatcherTimer();
             CWIDTimeout = new DispatcherTimer();
             CWIDPulse = new DispatcherTimer();
             PTTPulse = new DispatcherTimer();
             TimeTimer = new DispatcherTimer();
-            
+
             this.InitializeComponent();
 
             // Override the ragchew timer, for demo
-            RXCORTimeout = TimeSpan.FromMinutes(.5);
+            RXCOSTimeout = TimeSpan.FromMinutes(.5);
             // Ovverride the CWID Timeout Timer field for demo
             TXCWIDTimeout = TimeSpan.FromMinutes(1);
 
@@ -78,18 +78,18 @@ namespace RadioRepeater
         }
 
 
-        // make the RXCORpin a public item
-        private int RXCORPinField = 5;
+        // make the RXCOSpin a public item
+        private int RXCOSPinField = 5;
 
-        public int RXCORPin
+        public int RXCOSPin
         {
             get
             {
-                return RXCORPinField;
+                return RXCOSPinField;
             }
             set
             {
-                RXCORPinField = value;
+                RXCOSPinField = value;
             }
         }
 
@@ -153,33 +153,33 @@ namespace RadioRepeater
             }
         }
 
-        // make the RXCORActive a public item
-        private bool RXCORActiveField = false;
+        // make the RXCOSActive a public item
+        private bool RXCOSActiveField = false;
 
-        public bool RXCORActive
+        public bool RXCOSActive
         {
             get
             {
-                return RXCORActiveField;
+                return RXCOSActiveField;
             }
             set
             {
-                RXCORActiveField = value;
+                RXCOSActiveField = value;
             }
         }
 
-        // make the RXCORTimeout a public item
-        private TimeSpan RXCORTimeoutField = TimeSpan.FromMinutes(3);
+        // make the RXCOSTimeout a public item
+        private TimeSpan RXCOSTimeoutField = TimeSpan.FromMinutes(3);
 
-        public TimeSpan RXCORTimeout
+        public TimeSpan RXCOSTimeout
         {
             get
             {
-                return RXCORTimeoutField;
+                return RXCOSTimeoutField;
             }
             set
             {
-                RXCORTimeoutField = value;
+                RXCOSTimeoutField = value;
             }
         }
 
@@ -310,18 +310,18 @@ namespace RadioRepeater
             // Show an error if there is no GPIO controller
             if (gpio == null)
             {
-                RXCORChannel = null;
+                RXCOSChannel = null;
                 return;
             }
 
-            // Set up the input RXCOR line
-            RXCORChannel = gpio.OpenPin(RXCORPin);
-            RXCORChannel.SetDriveMode(GpioPinDriveMode.Input);
-            RXCORChannel.DebounceTimeout = TimeSpan.FromMilliseconds(15);
+            // Set up the input RXCOS line
+            RXCOSChannel = gpio.OpenPin(RXCOSPin);
+            RXCOSChannel.SetDriveMode(GpioPinDriveMode.Input);
+            RXCOSChannel.DebounceTimeout = TimeSpan.FromMilliseconds(15);
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                RXCORText.Text = "RXCOR Startup: " + DateTime.Now;
-                RXCOR.Fill = redDot;
+                RXCOSText.Text = "RXCOS Startup: " + DateTime.Now;
+                RXCOS.Fill = redDot;
             });
 
 
@@ -394,7 +394,7 @@ namespace RadioRepeater
             });
 
             // Now that all is up and running, and then start the RX triggers
-            RXCORChannel.ValueChanged += RXCORPin_ValueChanged;
+            RXCOSChannel.ValueChanged += RXCOSPin_ValueChanged;
             RXCTCSSChannel.ValueChanged += RXCTCSSPin_ValueChanged;
 
         }
@@ -413,14 +413,14 @@ namespace RadioRepeater
             });
 
             // Setup the Time Ticker, to update the display screen
-            TimeSpan timeSec = TimeSpan.FromMinutes(1);
+            TimeSpan timeSec = TimeSpan.FromSeconds(1);
             TimeTimer.Interval = timeSec;
             TimeTimer.Tick += TimeTimer_Tick;
             TimeTimer.Start();
         }
 
         /// <summary>
-        /// This is the Event from the change in COR line. If the CTCSS line is active, 
+        /// This is the Event from the change in COS line. If the CTCSS line is active, 
         /// then the TX should be turned on, and the CTCSS should be turned on, and 
         /// the timeout timer should be started, if it's not running. 
         /// On unkey, the TX and CTCSS should be turned off. The timeout timer should 
@@ -431,41 +431,41 @@ namespace RadioRepeater
         /// <param name="args"></param>
 
 
-        private async void RXCORPin_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs args)
+        private async void RXCOSPin_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs args)
         {
             if (args.Edge == GpioPinEdge.RisingEdge)
 
             {
-                if (RXCORActive)
+                if (RXCOSActive)
                 { // on
-                    rxcor = true;
+                    rxcos = true;
                 }
                 else
                 { // off
-                    rxcor = false;
+                    rxcos = false;
                 }
             }
             else
             {
-                if (!RXCORActive)
+                if (!RXCOSActive)
                 { // on
-                    rxcor = true;
+                    rxcos = true;
                 }
                 else
                 { // off
-                    rxcor = false;
+                    rxcos = false;
                 }
             }
 
 
             // Bring up transmitter,
-            if (rxcor & rxctcss)
+            if (rxcos && rxctcss)
             {
                 rx = true;
                 // Setup the CWID timer, if not already running
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                TXPTTOn();
+                    TXPTTOn();
                 });
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
@@ -473,36 +473,39 @@ namespace RadioRepeater
                     });
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                         {
-                            CORTimeoutStart();
-                });
+                            COSTimeoutStart();
+                        });
             }
             else
             {
-                rx = false;
-                // Stop the CWID timer, if not already running
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                if (rx)
                 {
-                    TXPTTOff();
-                });
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                {
-                    TXCTCSSOff();
-                });
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                {
-                    CORTimeoutStop();
-                });
+                    rx = false;
+                    // Stop the CWID timer, if not already running
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        TXPTTOff();
+                    });
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        TXCTCSSOff();
+                    });
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        COSTimeoutStop();
+                    });
 
+                }
             }
 
             // Update display 
-            if (rxcor)
+            if (rxcos)
             {
                 // Output the time, and change to green.
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    RXCORText.Text = "Last RXCOR on: " + DateTime.Now;
-                    RXCOR.Fill = greenDot;
+                    RXCOSText.Text = "Last RXCOS on: " + DateTime.Now;
+                    RXCOS.Fill = greenDot;
                 });
             }
             else
@@ -510,8 +513,8 @@ namespace RadioRepeater
                 // Output the time, and change to red.
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    RXCORText.Text = "Last RXCOR off: " + DateTime.Now;
-                    RXCOR.Fill = redDot;
+                    RXCOSText.Text = "Last RXCOS off: " + DateTime.Now;
+                    RXCOS.Fill = redDot;
                 });
             }
 
@@ -538,7 +541,7 @@ namespace RadioRepeater
 
 
         /// <summary>
-        /// This is the event from the inbound CTCSS line. If the COR line is active, 
+        /// This is the event from the inbound CTCSS line. If the COS line is active, 
         /// then the TX should be turned on, and the CTCSS should be turned on, and 
         /// the timeout timer should be started, if it's not running.
         /// On unkey, the TX and CTCSS should be turned off. 
@@ -573,7 +576,7 @@ namespace RadioRepeater
             }
 
             // Bring up the transmitter, if both are true
-            if (rxcor & rxctcss)
+            if (rxcos && rxctcss)
             {
                 rx = true;
                 // Setup the CWID timer, if not already running
@@ -585,27 +588,30 @@ namespace RadioRepeater
                     {
                         TXCTCSSOn();
                     });
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                        {
-                            CORTimeoutStart();
-                });
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        COSTimeoutStart();
+                    });
             }
             else
             {
-                rx = false;
-                // Stop the CWID timer, if not already running
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                if (rx)
                 {
-                    TXPTTOff();
-                });
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    rx = false;
+                    // Stop the CWID timer, if not already running
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
-                        TXCTCSSOff();
+                        TXPTTOff();
                     });
                     await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                         {
-                            CORTimeoutStop();
-                });
+                            TXCTCSSOff();
+                        });
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            COSTimeoutStop();
+                        });
+                }
             }
 
             // Update display 
@@ -800,29 +806,20 @@ namespace RadioRepeater
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void TimeTimer_Tick(object sender, object e)
+        private void TimeTimer_Tick(object sender, object e)
         {
             // Update the time
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                TimeText.Text = DateTime.Now.ToString();
-                // Setup the Time Ticker, to update the display screen
-                TimeTimer.Stop();
-                TimeSpan timeSec = TimeSpan.FromMinutes(1);
-                TimeTimer.Interval = timeSec;
-                TimeTimer.Tick += TimeTimer_Tick;
-                TimeTimer.Start();
-            });
+            TimeText.Text = DateTime.Now.ToString();
         }
 
 
         /// <summary>
-        /// Timer event for COR timeout, turn off ctcss, 
+        /// Timer event for COS timeout, turn off ctcss, 
         /// start the timer for the TX PTT turnoff and update display
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void CORTimeout_Tick(object sender, object e)
+        private async void COSTimeout_Tick(object sender, object e)
         {
 
             // Shut off the virtual RX indicator
@@ -838,14 +835,14 @@ namespace RadioRepeater
             });
 
             // turn off timer
-            CORTimeout.Stop();
+            COSTimeout.Stop();
 
             // Output the time, and change to yellow/red.
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 RXText.Text = "Last RX timeout: " + DateTime.Now;
                 RX.Fill = yellowDot;
-                TXPTTText.Text = "Last PTT timeout: " + DateTime.Now;
+                TXPTTText.Text = "Last TXPTT timeout: " + DateTime.Now;
                 TXPTT.Fill = yellowDot;
                 TXCTCSSText.Text = "Last TXCTCSS timeout: " + DateTime.Now;
                 TXCTCSS.Fill = yellowDot;
@@ -920,25 +917,25 @@ namespace RadioRepeater
 
 
         /// <summary>
-        /// This will start the COR timer
+        /// This will start the COS timer
         /// </summary>
-        private void CORTimeoutStart()
+        private void COSTimeoutStart()
         {
-            // Setup the RXCOR timer
-            TimeSpan CORoff = RXCORTimeout;
-            CORTimeout.Interval = CORoff;
-            CORTimeout.Tick += CORTimeout_Tick;
-            CORTimeout.Start();
+            // Setup the RXCOS timer
+            TimeSpan COSoff = RXCOSTimeout;
+            COSTimeout.Interval = COSoff;
+            COSTimeout.Tick += COSTimeout_Tick;
+            COSTimeout.Start();
         }
 
 
         /// <summary>
-        /// This will stop the COR timer
+        /// This will stop the COS timer
         /// </summary>
-        private void CORTimeoutStop()
+        private void COSTimeoutStop()
         {
-            // Stop the RXCOR timer
-            CORTimeout.Stop();
+            // Stop the RXCOS timer
+            COSTimeout.Stop();
         }
 
 
@@ -970,7 +967,7 @@ namespace RadioRepeater
                 // Output the time, and change to red.
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                TXPTTText.Text = "Last PTT off: " + DateTime.Now;
+                TXPTTText.Text = "Last TXPTT off: " + DateTime.Now;
                 TXPTT.Fill = redDot;
             });
             }
